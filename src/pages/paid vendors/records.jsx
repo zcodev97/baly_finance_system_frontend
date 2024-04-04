@@ -37,10 +37,11 @@ const PaidVendorsPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.code);
+        console.log(data.results);
         if (data.code === "token_not_valid") {
           navigate("/login", { replace: true });
         }
+
         data?.results.map((i) => {
           i.to_be_paid = i.to_be_paid.toLocaleString("en-US", {
             style: "currency",
@@ -119,7 +120,7 @@ const PaidVendorsPage = () => {
               </thead>
               <tbody>
                 {paginatedData
-                  .map(({ orders, created_by, id, is_paid, ...rest }) => rest)
+                  .map(({ created_by, id, is_paid, ...rest }) => rest)
                   .map((i) => (
                     <tr key={i.vendor_id + Math.random() * 10}>
                       <td>{i.vendor_id}</td>
@@ -139,6 +140,23 @@ const PaidVendorsPage = () => {
                       <td>{i.pay_type}</td>
                       <td>{i.start_date}</td>
                       <td>{i.end_date}</td>
+                      <td>
+                        <button
+                          className="btn btn-info"
+                          onClick={() => {
+                            navigate("/paid_vendor_orders_details", {
+                              state: {
+                                row: i,
+                                data: i,
+                                startDate: i.start_date,
+                                endDate: i.end_date,
+                              },
+                            });
+                          }}
+                        >
+                          Details
+                        </button>
+                      </td>
                       {/* {Object.values(item).map((i) => {
                         return <td>{i}</td>;
                       })} */}

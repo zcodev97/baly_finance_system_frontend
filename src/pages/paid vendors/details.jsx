@@ -17,6 +17,8 @@ function PaidVendorOrdersPage() {
   const start_date = location.state.startDate;
   const end_date = location.state.endDate;
 
+  console.log(location.state);
+
   const pagination = paginationFactory({
     page: 1,
     sizePerPage: location.state.row.orders?.length,
@@ -76,8 +78,6 @@ function PaidVendorOrdersPage() {
     // },
   ];
 
-  // console.log(location.state.row.orders);
-
   location.state.row.orders?.map((i) => {
     i.subtotal = i.subtotal?.toLocaleString("en-US", {
       style: "currency",
@@ -86,7 +86,10 @@ function PaidVendorOrdersPage() {
       maximumFractionDigits: 2,
     });
 
-    i.order_date = formatDate(new Date(i.order_date));
+    // Create a new Date object from the string
+    const dateObject = new Date(i.order_date);
+
+    i.order_date = dateObject.toISOString().slice(0, 10);
     // i.date_from = formatDate(new Date(i.date_from));
     // i.date_to = formatDate(new Date(i.date_to));
     // i.payment_cycle = i.payment_cycle.title;
@@ -96,17 +99,6 @@ function PaidVendorOrdersPage() {
   return (
     <>
       <NavBar />
-
-      <div className="container">
-        <div
-          className="btn"
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          Back
-        </div>
-      </div>
 
       <div className="container-fluid" style={{ overflowX: "auto" }}>
         <div

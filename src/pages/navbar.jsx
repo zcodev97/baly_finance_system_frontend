@@ -101,23 +101,21 @@ function NavBar() {
                 </Link>
               </li>
 
-              <ul className="navbar-nav">
-                <li className="nav-item btn m-1 p-2 ">
-                  <b className="text-light">
-                    {" "}
-                    {localStorage.getItem("username")}
-                  </b>
-                </li>
-                <li className="nav-item rounded m-1">
-                  <Link
-                    className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
-                    to="/login"
-                    onClick={handleLogout}
-                  >
-                    <b>Sign Out</b>
-                  </Link>
-                </li>
-              </ul>
+              <li className="nav-item btn m-1 p-2 ">
+                <b className="text-light">
+                  {" "}
+                  {localStorage.getItem("username")}
+                </b>
+              </li>
+              <li className="nav-item rounded m-1">
+                <Link
+                  className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
+                  to="/login"
+                  onClick={handleLogout}
+                >
+                  <b>Sign Out</b>
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

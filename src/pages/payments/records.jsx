@@ -15,6 +15,7 @@ import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
 import * as XLSX from "xlsx";
+import swal from "sweetalert";
 
 function PaymentsPage() {
   const location = useLocation();
@@ -718,70 +719,103 @@ function PaymentsPage() {
                           <button
                             className="btn btn-warning"
                             onClick={() => {
-                              if (
-                                window.confirm(
-                                  `Are You Sure to Pay ${i.vendor} Vendor, Please Note that all orders for this vendor will marked as paid`
-                                )
-                              ) {
-                                if (filteredData.length > 0) {
-                                  filteredData.splice(rowIndex, 1);
-                                  setFilteredData(
-                                    filteredData.filter(
-                                      (item, index) => index !== rowIndex
-                                    )
-                                  );
+                              swal({
+                                text: `Are You Sure to Pay ${i.vendor} Vendor, Please Note that all orders for this vendor will marked as paid`,
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                              }).then((willDelete) => {
+                                if (willDelete) {
+                                  setLoading(true);
+                                  if (filteredData.length > 0) {
+                                    data.splice(rowIndex, 1);
 
+                                    setFilteredData(data);
+                                    // setData(data);
+
+                                    setTotalTobePaid(
+                                      data.reduce(
+                                        (accumulator, currentObject) =>
+                                          accumulator +
+                                          currentObject.to_be_paid,
+                                        0
+                                      )
+                                    );
+                                    setTotalOrders(
+                                      data.reduce(
+                                        (accumulator, currentObject) =>
+                                          accumulator +
+                                          parseFloat(currentObject.order_count),
+                                        0
+                                      )
+                                    );
+                                    setTotalVendors(data.length);
+                                  } else {
+                                    data.splice(rowIndex, 1);
+
+                                    setData(data);
+
+                                    setTotalTobePaid(
+                                      data.reduce(
+                                        (accumulator, currentObject) =>
+                                          accumulator +
+                                          currentObject.to_be_paid,
+                                        0
+                                      )
+                                    );
+                                    setTotalOrders(
+                                      data.reduce(
+                                        (accumulator, currentObject) =>
+                                          accumulator +
+                                          parseFloat(currentObject.order_count),
+                                        0
+                                      )
+                                    );
+                                    setTotalVendors(data.length);
+
+                                    // Filter out the deleted object
+                                  }
+
+                                  paySingleVendor(i);
+                                  swal("Done!", {
+                                    icon: "success",
+                                  });
+
+                                  setFilteredData([]);
+                                  setSelectedPaymentCycle("");
+                                  setSelectedVendor("");
+                                  setSelectedPaymentMethod("");
                                   setTotalTobePaid(
-                                    filteredData.reduce(
+                                    data.reduce(
                                       (accumulator, currentObject) =>
                                         accumulator + currentObject.to_be_paid,
                                       0
                                     )
                                   );
                                   setTotalOrders(
-                                    filteredData.reduce(
+                                    data.reduce(
                                       (accumulator, currentObject) =>
                                         accumulator +
                                         parseFloat(currentObject.order_count),
                                       0
                                     )
                                   );
+                                  setTotalVendors(data.length);
 
-                                  // Filter out the deleted object
+                                  setLoading(false);
                                 } else {
-                                  console.log(data.length);
-
-                                  data.splice(rowIndex, 1);
-                                  console.log(data.length);
-                                  setData(
-                                    data.filter(
-                                      (item, index) => index !== rowIndex
-                                    )
-                                  );
-
-                                  setTotalTobePaid(
-                                    data.reduce(
-                                      (accumulator, currentObject) =>
-                                        accumulator + currentObject.to_be_paid,
-                                      0
-                                    )
-                                  );
-                                  setTotalOrders(
-                                    data.reduce(
-                                      (accumulator, currentObject) =>
-                                        accumulator +
-                                        parseFloat(currentObject.order_count),
-                                      0
-                                    )
-                                  );
-
-                                  // Filter out the deleted object
+                                  swal("You Cancelled the Operation!");
                                 }
+                              });
+                              // if (
+                              //   window.confirm(
+                              //     `Are You Sure to Pay ${i.vendor} Vendor, Please Note that all orders for this vendor will marked as paid`
+                              //   )
+                              // ) {
 
-                                paySingleVendor(i);
-                              } else {
-                                alert("You Cancelled the Operation");
-                              }
+                              // } else {
+                              //   alert("You Cancelled the Operation");
+                              // }
                             }}
                           >
                             <b> Pay</b>
