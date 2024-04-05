@@ -9,6 +9,7 @@ import PaymentsPage from "./pages/payments/records";
 import PaymentDetialsPage from "./pages/payments/details";
 import PaidVendorsPage from "./pages/paid vendors/records";
 import PaidVendorOrdersPage from "./pages/paid vendors/details";
+import VendorDetailsPage from "./pages/vendors/details";
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
               path="/container_details"
               element={<ContainerDetailsPage />}
             />
-            <Route path="/add_container" element={<AddContainerPage />} />
+            <Route path="/vendor_details" element={<VendorDetailsPage />} />
 
             <Route path="*" element={<NoPage />} />
           </Routes>

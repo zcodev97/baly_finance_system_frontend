@@ -79,7 +79,7 @@ function NavBar() {
                   <i className="fi fi-rs-bells"></i>
                 </Link>
               </li>
-              {/* <li className="nav-item rounded m-1">
+              <li className="nav-item rounded m-1">
                 <Link
                   onClick={() => handleLinkClick("vendors")}
                   className={`${navLinkClassName} ${
@@ -89,7 +89,7 @@ function NavBar() {
                 >
                   <h5>Vendors</h5>
                 </Link>
-              </li> */}
+              </li>
               <li className="nav-item rounded m-1">
                 <Link className={navLinkClassName} to="/payments">
                   <h5>Create Payment</h5>

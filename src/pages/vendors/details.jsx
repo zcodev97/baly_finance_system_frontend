@@ -8,22 +8,27 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
-function ContainerDetailsPage() {
+import Select from "react-select";
+import Loading from "../loading";
+
+function VendorDetailsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [deposits, setDeposits] = useState([]);
-  const [withdraws, setWithdraws] = useState([]);
 
-  const [totalDepositsDinar, setTotalDepositsDinar] = useState(0);
-  const [totalDepositsDollar, setTotalDepositsDollar] = useState(0);
+  const [vendorName, setVendorName] = useState("");
+  const [number, setNumber] = useState("");
+  const [receiverName, setPaymentReceiverName] = useState("");
+  const [phoneNumber, setOwnerPhoneNumber] = useState("");
+  const [ownerEmail, setOwnerEmail] = useState("");
 
-  const [totalWithdrawsDinar, setTotalWithdrawsDinar] = useState(0);
-  const [totalWithdrawsDollar, setTotalWithdrawsDollar] = useState(0);
-
-  async function loadDeposits() {
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [paymentMethodDropDown, setpaymentMethodDropDown] = useState([]);
+  let dropdownMenupaymentmethodTemp = [];
+  async function loadPaymentsMethod() {
     setLoading(true);
-    await fetch(SYSTEM_URL + "container_deposits/" + location.state.id, {
+
+    fetch(SYSTEM_URL + "payment_methods/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,112 +36,39 @@ function ContainerDetailsPage() {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        setTotalDepositsDinar(
-          data.reduce((accumulator, currentItem) => {
-            return accumulator + currentItem.price_in_dinar;
-          }, 0)
-        );
-
-        setTotalDepositsDollar(
-          data.reduce((accumulator, currentItem) => {
-            return accumulator + currentItem.price_in_dollar;
-          }, 0)
-        );
-        data.map((i) => {
-          i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "IQD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
+      .then((response) => {
+        if (response.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+        response.results?.forEach((i) => {
+          dropdownMenupaymentmethodTemp.push({
+            label: i.title,
+            value: i.id,
           });
-
-          i.price_in_dollar = i.price_in_dollar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
-
-          i.created_at = formatDate(new Date(i.created_at));
-          i.company_name = i.company_name.title;
-          i.container = i.container.name;
         });
-        setDeposits(data);
+
+        setSelectedPaymentMethod(
+          dropdownMenupaymentmethodTemp.filter(
+            (i) => i.label === location.state.pay_type
+          )
+        );
+        setpaymentMethodDropDown(dropdownMenupaymentmethodTemp);
       })
-      .catch((error) => {
-        alert(error);
+      .catch((e) => {
+        alert(e);
       })
       .finally(() => {
         setLoading(false);
       });
   }
-  const depositsColumns = [
-    {
-      dataField: "created_at",
-      text: "تاريخ الانشاء",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "received_from",
-      text: "استلام من",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "description",
-      text: "التفاصيل",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "price_in_dollar",
-      text: "مبلغ الدولار",
-      sort: true,
-      filter: textFilter(),
-    },
 
-    {
-      dataField: "price_in_dinar",
-      text: "مبلغ الدينار",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "company_name",
-      text: "اسم الشركة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "container",
-      text: "القاصة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "invoice_id",
-      text: "تسلسل السجل",
-      sort: true,
-      filter: textFilter(),
-    },
-  ];
-
-  const pagination = paginationFactory({
-    page: 1,
-    sizePerPage: 5,
-    lastPageText: ">>",
-    firstPageText: "<<",
-    nextPageText: ">",
-    prePageText: "<",
-    showTotal: true,
-    alwaysShowAllBtns: true,
-  });
-
-  async function loadWithdraws() {
+  const [selectedPaymentCycle, setSelectedPaymentCycle] = useState("");
+  const [paymentCycleDropDown, setpaymentCycleDropDown] = useState([]);
+  let dropdownMenupaymentcyclesTemp = [];
+  async function loadPaymentsCycle() {
     setLoading(true);
-    await fetch(SYSTEM_URL + "container_withdraws/" + location.state.id, {
+
+    fetch(SYSTEM_URL + "payment_cycles/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -144,282 +76,171 @@ function ContainerDetailsPage() {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        setTotalWithdrawsDinar(
-          data.reduce((accumulator, currentItem) => {
-            return accumulator + currentItem.price_in_dinar;
-          }, 0)
-        );
-
-        setTotalWithdrawsDollar(
-          data.reduce((accumulator, currentItem) => {
-            return accumulator + currentItem.price_in_dollar;
-          }, 0)
-        );
-
-        data.map((i) => {
-          i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "IQD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
+      .then((response) => {
+        response.results?.forEach((i) => {
+          dropdownMenupaymentcyclesTemp.push({
+            label: i.title,
+            value: i.id,
           });
-
-          i.price_in_dollar = i.price_in_dollar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
-
-          i.created_at = formatDate(new Date(i.created_at));
-          i.company_name = i.company_name.title;
-          i.container = i.container.name;
-          i.withdraw_type = i.withdraw_type.title;
         });
-        setWithdraws(data);
+
+        setSelectedPaymentCycle(
+          dropdownMenupaymentcyclesTemp.filter(
+            (i) => i.label === location.state.pay_period
+          )
+        );
+        setpaymentCycleDropDown(dropdownMenupaymentcyclesTemp);
       })
-      .catch((error) => {
-        alert(error);
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    setLoading(false);
   }
-  const withdrawsColumns = [
-    {
-      dataField: "created_at",
-      text: "تاريخ الانشاء",
-      sort: true,
-      filter: textFilter(),
-    },
 
-    {
-      dataField: "description",
-      text: "التفاصيل",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "price_in_dollar",
-      text: "مبلغ الدولار",
-      sort: true,
-      filter: textFilter(),
-    },
-
-    {
-      dataField: "price_in_dinar",
-      text: "مبلغ الدينار",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "withdraw_type",
-      text: "السيد",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "out_to",
-      text: "الي",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "company_name",
-      text: "اسم الشركة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "container",
-      text: "القاصة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "invoice_id",
-      text: "تسلسل السجل",
-      sort: true,
-      filter: textFilter(),
-    },
-  ];
-
-  const rowDepositEvents = {
-    onClick: (e, row, rowIndex) => {
-      navigate("/deposit_details", {
-        state: {
-          invoice_id: row.invoice_id,
-          container: row.container,
-          company_name: row.company_name,
-          price_in_dinar: row.price_in_dinar,
-          price_in_dollar: row.price_in_dollar,
-          description: row.description,
-          received_from: row.received_from,
-          created_at: row.created_at,
-        },
-      });
-    },
-  };
-
-  const rowWithdrawEvents = {
-    onClick: (e, row, rowIndex) => {
-      navigate("/withdraw_details", {
-        state: {
-          invoice_id: row.invoice_id,
-          container: row.container,
-          company_name: row.company_name,
-          price_in_dinar: row.price_in_dinar,
-          price_in_dollar: row.price_in_dollar,
-          description: row.description,
-          withdraw_type: row.withdraw_type,
-          created_at: row.created_at,
-          out_to: row.out_to,
-        },
-      });
-    },
-  };
   useEffect(() => {
-    loadDeposits();
-    loadWithdraws();
+    loadPaymentsMethod();
+    loadPaymentsCycle();
   }, []);
+
   return (
     <>
       <NavBar />
-      <div className="container text-center p-2 " style={{ fontSize: "24px" }}>
-        <h1 style={{ fontWeight: "bold" }}>{location.state.name} </h1>
-      </div>
 
-      <div className="container">
-        <table className="table table-sm  table-strpied text-center">
-          <thead>
-            <tr>
-              <td style={{ fontSize: "20px" }}>
-                {(totalDepositsDinar - totalWithdrawsDinar).toLocaleString(
-                  "en-US",
-                  {
-                    style: "currency",
-                    currency: "IQD",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </td>
-              <td className="text-start" style={{ fontSize: "20px" }}>
-                ربح الدينار
-              </td>
-            </tr>
-            <tr>
-              <td style={{ fontSize: "20px" }}>
-                {" "}
-                {(totalDepositsDollar - totalWithdrawsDollar).toLocaleString(
-                  "en-US",
-                  {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </td>
-              <td className="text-start" style={{ fontSize: "20px" }}>
-                {" "}
-                ربح الدولار{" "}
-              </td>
-            </tr>
-          </thead>
-        </table>
-      </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div>
+          <div
+            className="container text-center p-2 "
+            style={{ fontSize: "20px" }}
+          >
+            <p style={{ fontWeight: "bold" }}>{location.state.name} </p>
+          </div>
 
-      <hr />
-      <div className="container text-center">
-        <h1 className="text-success "> الايداعات</h1>
-        <table className="table table-strpied table-hover ">
-          <tbody>
-            <tr>
-              <td className="text-end">
-                {totalDepositsDinar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "IQD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدينار</td>
-            </tr>
-            <tr>
-              <td className="text-end">
-                {totalDepositsDollar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدولار</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className="container-fluid" style={{ overflowX: "auto" }}>
-        <BootstrapTable
-          className="text-center"
-          hover={true}
-          bordered={true}
-          bootstrap4
-          keyField="id"
-          columns={depositsColumns}
-          data={deposits}
-          pagination={pagination}
-          filter={filterFactory()}
-          rowEvents={rowDepositEvents}
-        />
-      </div>
+          <div className="container text-center">
+            <table className="table">
+              <thead>
+                <tr>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <b> Vendor Name</b>
+                  </td>
+                  <td>
+                    <input
+                      onChange={(e) => {
+                        setVendorName(e.target.value);
+                      }}
+                      type="text"
+                      className="form-control text-center"
+                      id="username"
+                      style={{ fontSize: "20px" }}
+                      defaultValue={location.state.name}
+                    />
+                  </td>
+                </tr>
 
-      <hr />
-      <div className="container text-center">
-        <h1 className="text-danger"> الصرفيات</h1>
-        <table className="table table-strpied table-hover ">
-          <tbody>
-            <tr>
-              <td className="text-end">
-                {totalWithdrawsDinar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "IQD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدينار</td>
-            </tr>
-            <tr>
-              <td className="text-end">
-                {totalWithdrawsDollar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدولار</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <tr>
+                  <td>Payment Method</td>
+                  <td>
+                    <Select
+                      defaultValue={selectedPaymentMethod}
+                      options={paymentMethodDropDown}
+                      onChange={(opt) => {
+                        setSelectedPaymentMethod(opt);
+                      }}
+                      value={selectedPaymentMethod}
+                    />
+                  </td>
+                </tr>
 
-      <div className="container-fluid" style={{ overflowX: "auto" }}>
-        <BootstrapTable
-          className="text-center"
-          hover={true}
-          bordered={true}
-          bootstrap4
-          keyField="id"
-          columns={withdrawsColumns}
-          data={withdraws}
-          pagination={pagination}
-          filter={filterFactory()}
-          rowEvents={rowWithdrawEvents}
-        />
-      </div>
+                <tr>
+                  <td>Payment Cycle</td>
+                  <td>
+                    <Select
+                      defaultValue={selectedPaymentCycle}
+                      options={paymentCycleDropDown}
+                      onChange={(opt) => {
+                        setSelectedPaymentCycle(opt);
+                      }}
+                      value={selectedPaymentCycle}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number</td>
+                  <td>
+                    <input
+                      onChange={(e) => {
+                        setNumber(e.target.value);
+                      }}
+                      type="text"
+                      className="form-control text-center"
+                      id="username"
+                      style={{ fontSize: "20px" }}
+                      defaultValue={location.state.number}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Payment Receiver Name </td>
+                  <td>
+                    <input
+                      onChange={(e) => {
+                        setPaymentReceiverName(e.target.value);
+                      }}
+                      type="text"
+                      className="form-control text-center"
+                      id="username"
+                      style={{ fontSize: "20px" }}
+                      defaultValue={location.state.owner_name}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Owner Phone </td>
+                  <td>
+                    <input
+                      onChange={(e) => {
+                        setOwnerPhoneNumber(e.target.value);
+                      }}
+                      type="text"
+                      className="form-control text-center"
+                      id="username"
+                      style={{ fontSize: "20px" }}
+                      defaultValue={location.state.owner_phone}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Owner Email </td>
+                  <td>
+                    <input
+                      onChange={(e) => {
+                        setOwnerEmail(e.target.value);
+                      }}
+                      type="text"
+                      className="form-control text-center"
+                      id="username"
+                      style={{ fontSize: "20px" }}
+                      defaultValue={location.state.owner_email}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="container-fluid" style={{ overflowX: "auto" }}></div>
+        </div>
+      )}
     </>
   );
 }
-export default ContainerDetailsPage;
+export default VendorDetailsPage;

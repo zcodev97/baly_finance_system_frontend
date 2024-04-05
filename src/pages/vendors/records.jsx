@@ -118,6 +118,35 @@ function VendorsPage() {
   return (
     <>
       <NavBar />
+      <div className="container-fluid">
+        <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+          {data.count} Vendors
+        </p>
+        <button className="btn btn-primary m-1" onClick={() => changePage(1)}>
+          &laquo; First
+        </button>
+        <button
+          className="btn btn-primary m-1"
+          onClick={() => changePage(currentPage - 1)}
+        >
+          &lsaquo; Prev
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className="btn btn-primary m-1"
+          onClick={() => changePage(currentPage + 1)}
+        >
+          Next &rsaquo;
+        </button>
+        <button
+          className="btn btn-primary m-1"
+          onClick={() => changePage(totalPages)}
+        >
+          Last &raquo;
+        </button>
+      </div>
       {loading ? (
         <Loading />
       ) : (
@@ -125,13 +154,6 @@ function VendorsPage() {
           className="container-fluid"
           style={{ margin: "0px", padding: "0px" }}
         >
-          <div
-            className="container text-start mt-2 mb-2"
-            style={{ fontSize: "34px" }}
-          >
-            <b> Vendors</b>
-          </div>
-
           {/* <div className="container mt-2 mb-2 text-center d-flex">
             <form onSubmit={handleSubmit}>
               <input
@@ -159,63 +181,55 @@ function VendorsPage() {
           >
             <div className="container-fluid " style={{ overflowX: "auto" }}>
               <table className="table table-striped table-sm table-hover">
-                <tfoot className="mt-3 ">
-                  <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-                    {data.count} Vendors
-                  </p>
-                </tfoot>
                 <thead>
                   <tr>
                     <th>Vendor ID</th>
-                    <th>Name</th>
-                    <th>Pay Period </th>
-                    <th>Pay Type</th>
-                    <th>Number </th>
-                    <th>Owner Name</th>
-                    <th>Owner Phone</th>
+                    <th>Vendor Name</th>
+                    <th>Payment Cycle </th>
+                    <th>Payment Method</th>
+                    <th>Payment Method Number </th>
+                    <th>Payment Receiver Name </th>
+                    <th>Owner Email </th>
                     <th>Fully Refended</th>
                     <th>Penalized</th>
+                    <th>Created At</th>
+                    <th>Account Manager</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedData.map((item) => (
                     <tr key={item.vendor_id + Math.random() * 10}>
-                      {Object.values(item).map((i) => {
+                      <td>{item.vendor_id}</td>
+                      <td>{item.name}</td>
+                      <td>{item.pay_period}</td>
+                      <td>{item.pay_type}</td>
+                      <td>{item.number}</td>
+                      <td>{item.owner_name}</td>
+                      <td>{item.owner_email}</td>
+                      <td>{item.fully_refunded}</td>
+                      <td>{item.penalized}</td>
+                      <td>
+                        {new Date(item.created_at).toISOString().slice(0, 10)}
+                      </td>
+                      <td>{item.account_manager_name}</td>
+
+                      {/* {Object.values(item).map((i) => {
                         return <td>{i}</td>;
-                      })}
+                      })} */}
+                      <td>
+                        <button
+                          className="btn btn-light text-primary"
+                          onClick={() => {
+                            navigate("/vendor_details", { state: item });
+                          }}
+                        >
+                          <b>Details</b>
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div>
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => changePage(1)}
-                >
-                  &laquo; First
-                </button>
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => changePage(currentPage - 1)}
-                >
-                  &lsaquo; Prev
-                </button>
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => changePage(currentPage + 1)}
-                >
-                  Next &rsaquo;
-                </button>
-                <button
-                  className="btn btn-primary m-1"
-                  onClick={() => changePage(totalPages)}
-                >
-                  Last &raquo;
-                </button>
-              </div>
             </div>
           </div>
         </div>
