@@ -434,8 +434,8 @@ function VendorDetailsPage() {
             >
               <thead>
                 <tr>
-                  <th>Old Name</th>
-                  <th>New Name</th>
+                  {/* <th>Old Name</th>
+                  <th>New Name</th> */}
                   <th>Old Payment Method</th>
                   <th>New Payment Method </th>
                   <th>Old Payment Cycle</th>
