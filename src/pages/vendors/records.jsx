@@ -9,6 +9,7 @@ import { SYSTEM_URL, formatDate } from "../../global";
 import Loading from "../loading";
 import NavBar from "../navbar";
 import axios from "axios";
+import Select from "react-select";
 
 function VendorsPage() {
   const navigate = useNavigate();
@@ -83,9 +84,45 @@ function VendorsPage() {
         setLoading(false);
       });
   }
+
+  const [selectedVendor, setSelectedVendor] = useState({});
+  const [vendorsDropDownMenu, setVendorsDropDownMenu] = useState([]);
+  let vendorTempDropDownMenu = [];
+  async function loadVendors() {
+    setLoading(true);
+
+    fetch(SYSTEM_URL + "get_vendor_id_name/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+        response.forEach((i) => {
+          vendorTempDropDownMenu.push({
+            label: i.name,
+            value: i.vendor_id,
+          });
+        });
+        setVendorsDropDownMenu(vendorTempDropDownMenu);
+      })
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   useEffect(() => {
     setLoading(true);
     loadData();
+    loadVendors();
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
 
@@ -122,6 +159,17 @@ function VendorsPage() {
         <p style={{ fontSize: "16px", fontWeight: "bold" }}>
           {data.count} Vendors
         </p>
+        <div className="container ">
+          Vendor
+          <Select
+            defaultValue={selectedVendor}
+            options={vendorsDropDownMenu}
+            onChange={(opt) => {
+              setSelectedVendor(opt);
+            }}
+            value={selectedVendor}
+          />
+        </div>
         <button className="btn btn-primary m-1" onClick={() => changePage(1)}>
           &laquo; First
         </button>

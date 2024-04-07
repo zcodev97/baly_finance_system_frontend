@@ -52,19 +52,6 @@ function PaymentsPage() {
     XLSX.writeFile(workbook, `${fileName}.xlsx`);
   };
 
-  // const rowEvents = {
-  //   onClick: (e, row, rowIndex) => {
-  //     navigate("/payment_details", {
-  //       state: {
-  //         row: row,
-  //         data: data,
-  //         startDate: startDate,
-  //         endDate: endDate,
-  //       },
-  //     });
-  //   },
-  // };
-
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState({});
   const [paymentMethodDropDown, setpaymentMethodDropDown] = useState([]);
   let dropdownMenupaymentmethodTemp = [];
