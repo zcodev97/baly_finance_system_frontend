@@ -237,7 +237,7 @@ function VendorsPage() {
                     <th>Payment Method</th>
                     <th>Payment Method Number </th>
                     <th>Payment Receiver Name </th>
-                    <th>Owner Email </th>
+
                     <th>Fully Refended</th>
                     <th>Penalized</th>
                     <th>Created At</th>
@@ -253,7 +253,7 @@ function VendorsPage() {
                       <td>{item.pay_type}</td>
                       <td>{item.number}</td>
                       <td>{item.owner_name}</td>
-                      <td>{item.owner_email}</td>
+
                       <td>{item.fully_refunded}</td>
                       <td>{item.penalized}</td>
                       <td>
