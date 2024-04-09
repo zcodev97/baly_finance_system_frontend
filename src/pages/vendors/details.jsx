@@ -28,7 +28,6 @@ function VendorDetailsPage() {
   const [fully_refunded, set_fully_refunded] = useState(
     location.state.fully_refunded === "no" ? false : true
   );
-  // console.log(location.state);
 
   const setPenalizedCheckBoxButton = (e) => {
     const { name, checked } = e.target;
@@ -42,12 +41,13 @@ function VendorDetailsPage() {
     set_fully_refunded(checked);
     console.log(name);
   };
-  console.log(location.state);
 
-  const [rows, setRows] = useState([{ title: "" }]);
+  const [rows, setRows] = useState([
+    ...Object.values(location.state.owner_email_json),
+  ]);
 
   const addRow = () => {
-    setRows([...rows, { title: "", count: "", price: "", total: "" }]);
+    setRows([...rows, { title: "" }]);
   };
 
   const deleteRow = (index) => {
@@ -174,8 +174,47 @@ function VendorDetailsPage() {
             (i) => i.label === location.state.account_manager_name
           )
         );
-        console.log(dropdownaccountManagersTemp);
+
         setAccountManagersDropDown(dropdownaccountManagersTemp);
+      })
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  // let emails = location.state.owner_email_json;
+
+  async function updateVendorInfo() {
+    setLoading(true);
+
+    let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+
+    fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        name: location.state.name,
+        number: number,
+        pay_period: selectedPaymentCycle.value,
+        pay_type: selectedPaymentMethod.value,
+        account_manager: selectedAccountManager.value,
+        owner_name: receiverName,
+        owner_phone: phoneNumber,
+        owner_email_json: emails,
+        fully_refunded: fully_refunded,
+        penalized: penalized,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        navigate("/vendors", { replace: true });
       })
       .catch((e) => {
         alert(e);
@@ -189,6 +228,8 @@ function VendorDetailsPage() {
     loadPaymentsMethod();
     loadPaymentsCycle();
     loadAccountManagers();
+    setPaymentReceiverName(location.state.owner_name);
+    setOwnerPhoneNumber(location.state.owner_phone);
   }, []);
 
   return (
@@ -199,227 +240,248 @@ function VendorDetailsPage() {
         <Loading />
       ) : (
         <div>
-          <div
-            className="container text-center p-2 "
-            style={{ fontSize: "20px" }}
-          >
-            <p style={{ fontWeight: "bold" }}>{location.state.name} </p>
-          </div>
-
-          <div className="container text-center">
-            <table className="table table-sm table-striped">
-              <thead>
-                <tr>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <b> Vendor Name</b>
-                  </td>
-                  <td>
-                    <input
-                      disabled={true}
-                      onChange={(e) => {
-                        setVendorName(e.target.value);
-                      }}
-                      type="text"
-                      className="form-control text-center"
-                      id="username"
-                      style={{ fontSize: "20px" }}
-                      defaultValue={location.state.name}
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Payment Method</td>
-                  <td>
-                    <Select
-                      defaultValue={selectedPaymentMethod}
-                      options={paymentMethodDropDown}
-                      onChange={(opt) => {
-                        setSelectedPaymentMethod(opt);
-                      }}
-                      value={selectedPaymentMethod}
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Payment Cycle</td>
-                  <td>
-                    <Select
-                      defaultValue={selectedPaymentCycle}
-                      options={paymentCycleDropDown}
-                      onChange={(opt) => {
-                        setSelectedPaymentCycle(opt);
-                      }}
-                      value={selectedPaymentCycle}
-                    />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Account Manager</td>
-                  <td>
-                    <Select
-                      defaultValue={selectedAccountManager}
-                      options={accountManagersDropDown}
-                      onChange={(opt) => {
-                        setSelecetedAccountManager(opt);
-                      }}
-                      value={selectedAccountManager}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Number</td>
-                  <td>
-                    <input
-                      onChange={(e) => {
-                        setNumber(e.target.value);
-                      }}
-                      type="text"
-                      className="form-control text-center"
-                      id="username"
-                      style={{ fontSize: "20px" }}
-                      defaultValue={location.state.number}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Payment Receiver Name </td>
-                  <td>
-                    <input
-                      onChange={(e) => {
-                        setPaymentReceiverName(e.target.value);
-                      }}
-                      type="text"
-                      className="form-control text-center"
-                      id="username"
-                      style={{ fontSize: "20px" }}
-                      defaultValue={location.state.owner_name}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Owner Phone </td>
-                  <td>
-                    <input
-                      onChange={(e) => {
-                        setOwnerPhoneNumber(e.target.value);
-                      }}
-                      type="text"
-                      className="form-control text-center"
-                      id="username"
-                      style={{ fontSize: "20px" }}
-                      defaultValue={location.state.owner_phone}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Account Manager </td>
-                  <td>
-                    <input
-                      onChange={(e) => {
-                        setOwnerPhoneNumber(e.target.value);
-                      }}
-                      type="text"
-                      className="form-control text-center"
-                      id="username"
-                      style={{ fontSize: "20px" }}
-                      defaultValue={location.state.owner_phone}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>Penalized </td>
-                  <td>
-                    <div>
+          <div className="container-fluid d-flex ">
+            <div className="container">
+              <table className="table table-sm table-striped">
+                <thead>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <b> Vendor ID</b>
+                    </td>
+                    <td>
                       <input
-                        className="form-check-input"
-                        type="checkbox"
-                        name="penalized"
-                        id="penalized"
-                        onChange={setPenalizedCheckBoxButton}
-                        checked={penalized}
+                        disabled={true}
+                        onChange={(e) => {
+                          setVendorName(e.target.value);
+                        }}
+                        type="text"
+                        className="form-control text-center"
+                        id="username"
+                        style={{ fontSize: "20px" }}
+                        defaultValue={location.state.vendor_id}
                       />
-
-                      <div className="p-2"></div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Fully Refended </td>
-                  <td>
-                    <div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b> Vendor Name</b>
+                    </td>
+                    <td>
                       <input
-                        checked={fully_refunded}
-                        className="form-check-input"
-                        type="checkbox"
-                        name="fully_refended"
-                        id="fully_refended"
-                        onChange={setFullyRefendedCheckBoxButton}
+                        disabled={true}
+                        onChange={(e) => {
+                          setVendorName(e.target.value);
+                        }}
+                        type="text"
+                        className="form-control text-center"
+                        id="username"
+                        style={{ fontSize: "20px" }}
+                        defaultValue={location.state.name}
                       />
+                    </td>
+                  </tr>
 
-                      <div className="p-2"></div>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={2}>
-                    <table className="table text-center">
-                      <tfoot>
+                  <tr>
+                    <td>Payment Method</td>
+                    <td>
+                      <Select
+                        defaultValue={selectedPaymentMethod}
+                        options={paymentMethodDropDown}
+                        onChange={(opt) => {
+                          setSelectedPaymentMethod(opt);
+                        }}
+                        value={selectedPaymentMethod}
+                      />
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Payment Cycle</td>
+                    <td>
+                      <Select
+                        defaultValue={selectedPaymentCycle}
+                        options={paymentCycleDropDown}
+                        onChange={(opt) => {
+                          setSelectedPaymentCycle(opt);
+                        }}
+                        value={selectedPaymentCycle}
+                      />
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Account Manager</td>
+                    <td>
+                      <Select
+                        defaultValue={selectedAccountManager}
+                        options={accountManagersDropDown}
+                        onChange={(opt) => {
+                          setSelecetedAccountManager(opt);
+                        }}
+                        value={selectedAccountManager}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Number</td>
+                    <td>
+                      <input
+                        onChange={(e) => {
+                          setNumber(e.target.value);
+                        }}
+                        type="text"
+                        className="form-control text-center"
+                        id="username"
+                        style={{ fontSize: "20px" }}
+                        defaultValue={location.state.number}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Payment Receiver Name </td>
+                    <td>
+                      <input
+                        onChange={(e) => {
+                          setPaymentReceiverName(e.target.value);
+                        }}
+                        type="text"
+                        className="form-control text-center"
+                        id="username"
+                        style={{ fontSize: "20px" }}
+                        defaultValue={location.state.owner_name}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Owner Phone </td>
+                    <td>
+                      <input
+                        onChange={(e) => {
+                          setOwnerPhoneNumber(e.target.value);
+                        }}
+                        type="text"
+                        className="form-control text-center"
+                        id="username"
+                        style={{ fontSize: "20px" }}
+                        defaultValue={location.state.owner_phone}
+                      />
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Penalized </td>
+                    <td>
+                      <div>
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="penalized"
+                          id="penalized"
+                          onChange={setPenalizedCheckBoxButton}
+                          checked={penalized}
+                        />
+
+                        <div className="p-2"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Fully Refended </td>
+                    <td>
+                      <div>
+                        <input
+                          checked={fully_refunded}
+                          className="form-check-input"
+                          type="checkbox"
+                          name="fully_refended"
+                          id="fully_refended"
+                          onChange={setFullyRefendedCheckBoxButton}
+                        />
+
+                        <div className="p-2"></div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  {/* <tr>
+                    <table className="table">
+                      <thead>
                         <tr>
-                          <th></th>
-                          <th>
-                            <button
-                              className="btn btn-light text-primary"
-                              onClick={addRow}
-                            >
-                              <b>Add Owner Email Field</b>
-                            </button>
-                          </th>
+                          <th>Email</th>
                         </tr>
-                      </tfoot>
+                      </thead>
                       <tbody>
-                        {rows.map((row, index) => (
-                          <tr key={index}>
-                            <td>
-                              <button
-                                className="btn btn-light text-danger"
-                                onClick={() => deleteRow(index)}
-                              >
-                                <b> Delete</b>
-                              </button>
-                            </td>
-
-                            <td>
-                              <input
-                                className="form-control text-center"
-                                type="text"
-                                // dir="rtl"
-                                value={row.title}
-                                onChange={(e) =>
-                                  handleChange(index, "title", e.target.value)
-                                }
-                              />
-                            </td>
-                          </tr>
-                        ))}
+                        {rows.map((i) => {
+                          return (
+                            <tr>
+                              <td>{i.title}</td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </tr> */}
+                  <tr>
+                    <td colSpan={2}>
+                      <table className="table text-center">
+                        <tfoot>
+                          <tr>
+                            <th></th>
+                            <th>
+                              <button
+                                className="btn btn-light text-primary"
+                                onClick={addRow}
+                              >
+                                <b>Add Another Email </b>
+                              </button>
+                            </th>
+                          </tr>
+                        </tfoot>
+                        <tbody>
+                          {rows.map((row, index) => (
+                            <tr key={index}>
+                              <td>
+                                <button
+                                  className="btn btn-light text-danger"
+                                  onClick={() => deleteRow(index)}
+                                >
+                                  <b> Delete</b>
+                                </button>
+                              </td>
+
+                              <td>
+                                <input
+                                  className="form-control text-center"
+                                  type="email"
+                                  // dir="rtl"
+                                  value={row.title}
+                                  onChange={(e) =>
+                                    handleChange(index, "title", e.target.value)
+                                  }
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="container text-center">
-            <button className="btn btn-light text-success">
+            <button
+              className="btn btn-light text-success"
+              onClick={updateVendorInfo}
+            >
               <b> Update Vendor</b>
             </button>
           </div>
