@@ -102,10 +102,7 @@ function NavBar() {
               </li>
 
               <li className="nav-item btn m-1 p-2 ">
-                <b className="text-light">
-                  {" "}
-                  {localStorage.getItem("username")}
-                </b>
+                <b className="text-light">{localStorage.getItem("username")}</b>
               </li>
               <li className="nav-item rounded m-1">
                 <Link

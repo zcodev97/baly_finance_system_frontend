@@ -15,12 +15,14 @@ function VendorDetailsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [paginatedData, setPaginatedData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [vendorName, setVendorName] = useState("");
   const [number, setNumber] = useState("");
   const [receiverName, setPaymentReceiverName] = useState("");
   const [phoneNumber, setOwnerPhoneNumber] = useState("");
-  const [ownerEmail, setOwnerEmail] = useState("");
+  const itemsPerPage = 15;
 
   const [penalized, setPenalized] = useState(
     location.state.penalized === "no" ? false : true
@@ -213,8 +215,84 @@ function VendorDetailsPage() {
     })
       .then((response) => response.json())
       .then((response) => {
+        updateLogVendor();
+
+        navigate("/vendor_details", { replace: true, state: response });
+        loadVendorLogUpdates();
+
+        // navigate("/vendors", { replace: true });
+      })
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  async function updateLogVendor() {
+    setLoading(true);
+
+    let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+
+    fetch(SYSTEM_URL + "create_vendor_update_log/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        vendor_id: location.state.vendor_id,
+        old_payment_method: location.state.pay_type,
+        new_payment_method: selectedPaymentMethod[0].label,
+        old_payment_cycle: location.state.pay_period,
+        new_payment_cycle: selectedPaymentCycle[0].label,
+        old_number: "111",
+        new_number: "111",
+        old_receiver_name: "string",
+        new_receiver_name: "string",
+        old_owner_phone: "string",
+        new_owner_phone: "string",
+        old_account_manager: "string",
+        new_account_manager: "string",
+        old_fully_refended: "string",
+        new_fully_refended: "string",
+        old_penalized: "string",
+        new_panelized: "string",
+        old_emails: "string",
+        new_emails: "string",
+        created_by: localStorage.getItem("user_id"),
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        // console.log(response);
+        // navigate("/vendor_details", { replace: true, state: response });
+      })
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  async function loadVendorLogUpdates() {
+    setLoading(true);
+
+    // let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+
+    fetch(SYSTEM_URL + "vendor_update_logs/" + location.state.vendor_id, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
         console.log(response);
-        navigate("/vendors", { replace: true });
+        setPaginatedData(response.results);
       })
       .catch((e) => {
         alert(e);
@@ -225,6 +303,7 @@ function VendorDetailsPage() {
   }
 
   useEffect(() => {
+    loadVendorLogUpdates();
     loadPaymentsMethod();
     loadPaymentsCycle();
     loadAccountManagers();
@@ -241,6 +320,16 @@ function VendorDetailsPage() {
       ) : (
         <div>
           <div className="container-fluid d-flex ">
+            <div>
+              <div
+                className="btn btn-primary mt-2 mb-2"
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                <b>Back To Vendors</b>
+              </div>
+            </div>
             <div className="container">
               <table className="table table-sm table-striped">
                 <thead>
@@ -475,51 +564,76 @@ function VendorDetailsPage() {
                 </tbody>
               </table>
             </div>
+            <div>
+              <button
+                className="btn btn-success  mt-2 mb-2"
+                onClick={updateVendorInfo}
+              >
+                <b> Update</b>
+              </button>
+            </div>
           </div>
 
-          <div className="container text-center">
-            <button
-              className="btn btn-light text-success"
-              onClick={updateVendorInfo}
-            >
-              <b> Update Vendor</b>
-            </button>
-          </div>
-
-          <div className="container-fluid ">
+          <div className="container-fluid mt-2 mb-2">
             <p className="text-danger mt-2 mb-2">
               <b>Vendor Log</b>
             </p>
-            <table
-              className="table table-sm text-center mt-2 mb-4"
-              style={{ fontSize: "12px" }}
-            >
-              <thead>
-                <tr>
-                  {/* <th>Old Name</th>
+
+            <div className="container-fluid" style={{ overflowX: "auto" }}>
+              <table
+                className="table table-sm table-striped table-hover"
+                style={{ fontSize: "12px" }}
+              >
+                <thead>
+                  <tr>
+                    {/* <th>Old Name</th>
                   <th>New Name</th> */}
-                  <th>Old Payment Method</th>
-                  <th>New Payment Method </th>
-                  <th>Old Payment Cycle</th>
-                  <th>New Payment Cycle </th>
-                  <th>Old Number</th>
-                  <th>New Number </th>
-                  <th>Old Payment Receiver Name</th>
-                  <th>New Payment Receiver Name </th>
-                  <th>Old Owner Phone</th>
-                  <th>New Owner Phone </th>
-                  <th>Old Account Manager</th>
-                  <th>New Account Manager </th>
-                  <th>Old Fully Refended</th>
-                  <th>New Fully Refended </th>
-                  <th>Old Penalized</th>
-                  <th>New Penalized </th>
-                  <th>Old Emails</th>
-                  <th>New Emails </th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+                    <th>Old Payment Method</th>
+                    <th>New Payment Method </th>
+                    <th>Old Payment Cycle</th>
+                    <th>New Payment Cycle </th>
+                    <th>Old Number</th>
+                    <th>New Number </th>
+                    <th>Old Payment Receiver Name</th>
+                    <th>New Payment Receiver Name </th>
+                    {/* <th>Old Owner Phone</th>
+                  <th>New Owner Phone </th> */}
+                    <th>Old Account Manager</th>
+                    <th>New Account Manager </th>
+                    <th>Old Fully Refended</th>
+                    <th>New Fully Refended </th>
+                    <th>Old Penalized</th>
+                    <th>New Penalized </th>
+                    <th>Old Emails</th>
+                    <th>New Emails </th>
+                    <th>Created At </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedData.reverse().map((item) => (
+                    <tr key={item.vendor_id + Math.random() * 10}>
+                      <td>{item.old_payment_method}</td>
+                      <td>{item.new_payment_method}</td>
+                      <td>{item.old_payment_cycle}</td>
+                      <td>{item.new_payment_cycle}</td>
+                      <td>{item.old_number}</td>
+                      <td>{item.new_number}</td>
+                      <td>{item.old_receiver_name}</td>
+                      <td>{item.new_receiver_name}</td>
+                      <td>{item.old_account_manager}</td>
+                      <td>{item.new_account_manager}</td>
+                      <td>{item.old_fully_refended}</td>
+                      <td>{item.new_fully_refended}</td>
+                      <td>{item.old_penalized}</td>
+                      <td>{item.new_panelized}</td>
+                      <td>{item.old_emails}</td>
+                      <td>{item.new_emails}</td>
+                      <td>{formatDate(item.created_at)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

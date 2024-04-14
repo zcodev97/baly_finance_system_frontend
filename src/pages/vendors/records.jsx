@@ -119,6 +119,32 @@ function VendorsPage() {
       });
   }
 
+  async function getSingleVendor(vendor_id) {
+    setLoading(true);
+
+    fetch(SYSTEM_URL + "vendor/" + vendor_id, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+        // console.log(response.results[0]);
+        navigate("/vendor_details", { state: response.results[0] });
+      })
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   useEffect(() => {
     setLoading(true);
     loadData();
@@ -139,19 +165,6 @@ function VendorsPage() {
     }
   };
 
-  const rowEvents = {
-    onClick: (e, row, rowIndex) => {
-      navigate("/container_details", {
-        state: {
-          id: row.id,
-          name: row.name,
-          total_dinar: row.total_dinar,
-          total_dollar: row.total_dollar,
-        },
-      });
-    },
-  };
-
   return (
     <>
       <NavBar />
@@ -159,16 +172,20 @@ function VendorsPage() {
         <p style={{ fontSize: "16px", fontWeight: "bold" }}>
           {data.count} Vendors
         </p>
-        <div className="container ">
-          Vendor
-          <Select
-            defaultValue={selectedVendor}
-            options={vendorsDropDownMenu}
-            onChange={(opt) => {
-              setSelectedVendor(opt);
-            }}
-            value={selectedVendor}
-          />
+        <div className="container-fluid mt-4 mb-4 text-start">
+          <div style={{ width: "300px" }}>
+            Search By Vendor
+            <Select
+              defaultValue={selectedVendor}
+              options={vendorsDropDownMenu}
+              onChange={(opt) => {
+                setSelectedVendor(opt);
+                // get selected vendor info and navigate to vendor details page
+                getSingleVendor(opt.value);
+              }}
+              value={selectedVendor}
+            />
+          </div>
         </div>
         <button className="btn btn-primary m-1" onClick={() => changePage(1)}>
           &laquo; First
@@ -266,6 +283,7 @@ function VendorsPage() {
                         <button
                           className="btn btn-light text-primary"
                           onClick={() => {
+                            console.log(item);
                             navigate("/vendor_details", { state: item });
                           }}
                         >
