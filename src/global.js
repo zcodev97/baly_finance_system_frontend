@@ -1,13 +1,16 @@
 function formatDate(date = new Date()) {
-  var d = new Date(date),
-    month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
+  const d = new Date(date);
 
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0"); // Month with leading zero
+  const day = String(d.getDate()).padStart(2, "0"); // Day with leading zero
 
-  return [year, month, day].join("-");
+  const hours = d.getHours();
+  const minutes = String(d.getMinutes()).padStart(2, "0"); // Minutes with leading zero
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const hours12 = hours % 12; // Convert to 12-hour format
+
+  return `${year}-${month}-${day} ${hours12}:${minutes} ${ampm}`;
 }
 
 // const SYSTEM_URL = "http://38.180.105.203:8010/";

@@ -12,7 +12,7 @@ function NavBar() {
     setActiveLink(link);
   };
 
-  let navLinkClassName = "nav-link text-light";
+  let navLinkClassName = "nav-link text-dark";
 
   const [loading, setLoading] = useState(false);
 
@@ -35,37 +35,13 @@ function NavBar() {
 
   return (
     <>
+      {/* side bar. */}
       <nav
-        className="navbar navbar-expand-sm bg-dark  navbar-dark  text-center rounded p-2"
-        id="no-print"
+        id="sidebarMenu"
+        className="collapse d-lg-block sidebar collapse bg-white"
       >
-        <div
-          className="container-fluid"
-          style={{
-            display: "flex",
-            color: "white",
-            flexDirection: "row-reverse",
-            alignItems: "center",
-            justifyContent: "end",
-            margin: "0px",
-            padding: "0px",
-          }}
-        >
-          {/* Start of the main navbar content */}
-          <div className="contaier-fluid">
-            <button
-              className="navbar-toggler bg-dark text-end"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-          </div>
-          <div className="collapse navbar-collapse" id="navbarNav">
+        <div className="position-sticky">
+          <div className="list-group list-group-flush mx-3 mt-1">
             <ul className="navbar-nav">
               <li className="nav-item rounded m-1">
                 <Link
@@ -90,6 +66,18 @@ function NavBar() {
                   <h5>Vendors</h5>
                 </Link>
               </li>
+
+              <li className="nav-item rounded m-1">
+                <Link
+                  onClick={() => handleLinkClick("vendors")}
+                  className={`${navLinkClassName} ${
+                    activeLink === "vendors" ? "active-link" : ""
+                  }`}
+                  to="/account_managers_vendors_logs"
+                >
+                  <h5>Logs</h5>
+                </Link>
+              </li>
               <li className="nav-item rounded m-1">
                 <Link className={navLinkClassName} to="/payments">
                   <h5>Create Payment</h5>
@@ -101,8 +89,8 @@ function NavBar() {
                 </Link>
               </li>
 
-              <li className="nav-item btn m-1 p-2 ">
-                <b className="text-light">{localStorage.getItem("username")}</b>
+              <li className="nav-item   text-start m-1 p-2 ">
+                <b className="text-dark">{localStorage.getItem("username")}</b>
               </li>
               <li className="nav-item rounded m-1">
                 <Link
@@ -118,9 +106,61 @@ function NavBar() {
         </div>
       </nav>
 
+      {/* nav bar */}
+      <nav
+        id="main-navbar"
+        className="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+      >
+        {/* Container wrapper */}
+        <button
+          className="navbar-toggler m-1 p-1"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#sidebarMenu"
+          aria-controls="sidebarMenu"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <b>Menu</b>
+        </button>
+        {/* Container wrapper */}
+      </nav>
       <Outlet />
     </>
   );
 }
 
 export default NavBar;
+<nav
+  className="navbar navbar-expand-sm bg-dark  navbar-dark  text-center rounded p-2"
+  id="no-print"
+>
+  <div
+    className="container-fluid"
+    style={{
+      display: "flex",
+      color: "white",
+      flexDirection: "row-reverse",
+      alignItems: "center",
+      justifyContent: "end",
+      margin: "0px",
+      padding: "0px",
+    }}
+  >
+    {/* Start of the main navbar content */}
+    <div className="contaier-fluid">
+      <button
+        className="navbar-toggler bg-dark text-end"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div className="collapse navbar-collapse" id="navbarNav"></div>
+  </div>
+</nav>;
