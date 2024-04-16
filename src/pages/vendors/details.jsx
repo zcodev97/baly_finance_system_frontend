@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SYSTEM_URL, formatDate } from "../../global";
+import { SYSTEM_URL, formatDate, randomInt } from "../../global";
 import NavBar from "../navbar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -269,7 +269,7 @@ function VendorDetailsPage() {
         })
         .then(async (response) => {
           if (Object.values(response).length > 0) {
-            SaveDataToLogsTableAndSendEmail(emails);
+            await SaveDataToLogsTableAndSendEmail(emails);
             navigate("/vendor_details", { replace: true, state: response });
             loadVendorUpdatesLogs();
           } else {
@@ -291,8 +291,7 @@ function VendorDetailsPage() {
   }
 
   async function SaveDataToLogsTableAndSendEmail(emails) {
-    console.log(selectedPaymentCycle);
-    console.log(selectedPaymentMethod);
+    setLoading(true);
     fetch(SYSTEM_URL + "create_vendor_update_log/", {
       method: "POST",
       headers: {
@@ -309,16 +308,14 @@ function VendorDetailsPage() {
         old_account_manager: oldAccountManager,
         new_account_manager: selectedAccountManager?.label,
         old_number:
-          location.state.number?.length > 0
-            ? location.state.number
-            : "no previous number",
+          location.state.number?.length > 0 ? location.state.number : "0",
         new_number: number?.length > 0 ? number : "0",
         old_receiver_name:
           location.state.owner_name?.length > 0
             ? location.state.owner_name
-            : "no previous receiver name",
+            : "no old receiver name",
         new_receiver_name:
-          receiverName?.length > 0 ? receiverName : "np previous one",
+          receiverName?.length > 0 ? receiverName : "no new receiver name",
         old_owner_phone: "string",
         new_owner_phone: "string",
 
@@ -330,11 +327,11 @@ function VendorDetailsPage() {
         old_emails:
           Object.values(location.state.owner_email_json)?.length > 0
             ? location.state.owner_email_json?.map((i) => i.title)?.toString()
-            : "no previous emails",
+            : "no emails",
         new_emails:
           Object.values(emails)?.length > 0
             ? emails?.map((i) => i.title)?.toString()
-            : "no previous emails",
+            : "no emails",
         created_by: localStorage.getItem("user_id"),
       }),
     })
@@ -346,7 +343,6 @@ function VendorDetailsPage() {
         }
       })
       .then((response) => {
-        console.log(response);
         if (Object.values(response).length > 0) {
           swal("Done!", {
             text: "Email Updates Sent",
@@ -365,7 +361,9 @@ function VendorDetailsPage() {
       })
       .catch((e) => {
         alert(e);
-        // console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
@@ -775,7 +773,7 @@ function VendorDetailsPage() {
                   </thead>
                   <tbody>
                     {paginatedData.map((item, index) => (
-                      <tr key={item.vendor_id + Math.random() * 10}>
+                      <tr className="align-middle" key={randomInt(1, 10000000)}>
                         <td>{index + 1}</td>
                         <td>{item.vendor_id}</td>
                         <td>{item.vendor_name}</td>

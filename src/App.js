@@ -4,7 +4,6 @@ import VendorsPage from "./pages/vendors/records";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ContainerDetailsPage from "./pages/vendors/details";
-import AddContainerPage from "./pages/vendors/add";
 import PaymentsPage from "./pages/payments/records";
 import PaymentDetialsPage from "./pages/payments/details";
 import PaidVendorsPage from "./pages/paid vendors/records";

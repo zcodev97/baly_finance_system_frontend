@@ -5,7 +5,7 @@ import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { SYSTEM_URL, formatDate } from "../../global";
+import { SYSTEM_URL, formatDate, randomInt } from "../../global";
 import Loading from "../loading";
 import NavBar from "../navbar";
 import axios from "axios";
@@ -251,7 +251,7 @@ function VendorsPage() {
             <div className="container-fluid " style={{ overflowX: "auto" }}>
               <table className="table table-striped table-sm table-hover">
                 <thead>
-                  <tr>
+                  <tr className="align-middle">
                     <th>Vendor ID</th>
                     <th>Vendor Name</th>
                     <th>Payment Cycle </th>
@@ -266,7 +266,7 @@ function VendorsPage() {
                 </thead>
                 <tbody>
                   {paginatedData.map((item) => (
-                    <tr key={item.vendor_id + Math.random() * 10}>
+                    <tr className="align-middle" key={randomInt(1, 1000000)}>
                       <td>{item.vendor_id}</td>
                       <td>{item.name}</td>
                       <td>{item.pay_period}</td>
