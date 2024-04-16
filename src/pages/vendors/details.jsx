@@ -21,6 +21,9 @@ function VendorDetailsPage() {
   const [number, setNumber] = useState("");
   const [receiverName, setPaymentReceiverName] = useState("");
   const [phoneNumber, setOwnerPhoneNumber] = useState("");
+  const [oldPaymentCycle, setOldPaymentCycle] = useState("");
+  const [oldPaymentMethod, setOldPaymentMethod] = useState("");
+  const [oldAccountManager, setOldAccountManager] = useState("");
 
   const [penalized, setPenalized] = useState(
     location.state.penalized === "no" ? false : true
@@ -32,14 +35,14 @@ function VendorDetailsPage() {
   const setPenalizedCheckBoxButton = (e) => {
     const { name, checked } = e.target;
     setPenalized(checked);
-    console.log(name);
-    console.log(checked);
+    // console.log(name);
+    // console.log(checked);
   };
 
   const setFullyRefendedCheckBoxButton = (e) => {
     const { name, checked } = e.target;
     set_fully_refunded(checked);
-    console.log(name);
+    // console.log(name);
   };
 
   const [rows, setRows] = useState([
@@ -96,14 +99,22 @@ function VendorDetailsPage() {
         });
 
         setSelectedPaymentMethod(
-          dropdownMenupaymentmethodTemp.filter(
+          dropdownMenupaymentmethodTemp.find(
             (i) => i.label === location.state.pay_type
           )
         );
+
+        setOldPaymentMethod(
+          dropdownMenupaymentmethodTemp.filter(
+            (i) => i.label === location.state.pay_type
+          )[0]?.label
+        );
+
         setpaymentMethodDropDown(dropdownMenupaymentmethodTemp);
       })
       .catch((e) => {
         alert(e);
+        // console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -133,14 +144,22 @@ function VendorDetailsPage() {
         });
 
         setSelectedPaymentCycle(
-          dropdownMenupaymentcyclesTemp.filter(
+          dropdownMenupaymentcyclesTemp.find(
             (i) => i.label === location.state.pay_period
           )
         );
+
+        setOldPaymentCycle(
+          dropdownMenupaymentcyclesTemp.filter(
+            (i) => i.label === location.state.pay_period
+          )[0]?.label
+        );
+
         setpaymentCycleDropDown(dropdownMenupaymentcyclesTemp);
       })
       .catch((e) => {
         alert(e);
+        // console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -170,15 +189,22 @@ function VendorDetailsPage() {
         });
 
         setSelecetedAccountManager(
-          dropdownaccountManagersTemp.filter(
+          dropdownaccountManagersTemp.find(
             (i) => i.label === location.state.account_manager_name
           )
+        );
+
+        setOldAccountManager(
+          dropdownaccountManagersTemp.filter(
+            (i) => i.label === location.state.account_manager_name
+          )[0]?.label
         );
 
         setAccountManagersDropDown(dropdownaccountManagersTemp);
       })
       .catch((e) => {
         alert(e);
+        // console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -199,8 +225,6 @@ function VendorDetailsPage() {
   }
 
   async function updateVendorInfo() {
-    setLoading(true);
-
     let emails = rows.filter((obj) => Object.keys(obj).length > 0);
 
     let areValidEmails = emails.map((i) => ValidateEmail(i.title));
@@ -216,6 +240,7 @@ function VendorDetailsPage() {
 
       return;
     } else {
+      setLoading(true);
       fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id, {
         method: "PATCH",
         headers: {
@@ -235,96 +260,124 @@ function VendorDetailsPage() {
           penalized: penalized,
         }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } else {
+            return {};
+          }
+        })
         .then(async (response) => {
-          fetch(SYSTEM_URL + "create_vendor_update_log/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({
-              vendor_id: location.state.vendor_id,
-              vendor_name: location.state.name,
-              old_payment_method: location.state.pay_type,
-              new_payment_method: selectedPaymentMethod[0].label,
-              old_payment_cycle: location.state.pay_period,
-              new_payment_cycle: selectedPaymentCycle[0].label,
-              old_number:
-                location.state.number?.length > 0
-                  ? location.state.number
-                  : "no previous number",
-              new_number: number?.length > 0 ? number : "0",
-              old_receiver_name:
-                location.state.old_receiver_name?.toString().length > 0
-                  ? location.state.old_receiver_name
-                  : "no previous receiver name",
-              new_receiver_name:
-                receiverName?.toString().length > 0
-                  ? receiverName
-                  : "np previous one",
-              old_owner_phone: "string",
-              new_owner_phone: "string",
-              old_account_manager: "string",
-              new_account_manager: "string",
-              old_fully_refended: "string",
-              new_fully_refended: "string",
-              old_penalized: "string",
-              new_panelized: "string",
-              old_emails:
-                Object.values(location.state.owner_email_json)?.length > 0
-                  ? location.state.owner_email_json
-                      ?.map((i) => i.title)
-                      ?.toString()
-                  : "no previous emails",
-              new_emails:
-                Object.values(emails)?.length > 0
-                  ? emails?.map((i) => i.title)?.toString()
-                  : "no previous emails",
-              created_by: localStorage.getItem("user_id"),
-            }),
-          })
-            .then((response) => response.json())
-            .then((response) => {
-              // console.log(response);
-              // navigate("/vendor_details", { replace: true, state: response });
-              swal("Done!", {
-                text: "Email Updates Sent",
-                icon: "success",
-                buttons: true,
-                dangerMode: true,
-              });
-            })
-            .catch((e) => {
-              alert(e);
-            })
-            .finally(() => {
-              setLoading(false);
+          if (Object.values(response).length > 0) {
+            SaveDataToLogsTableAndSendEmail(emails);
+            navigate("/vendor_details", { replace: true, state: response });
+            loadVendorUpdatesLogs();
+          } else {
+            swal("Failed To Save Data to DB !", {
+              text: "Data not saved and Email is not Sent",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
             });
-
-          navigate("/vendor_details", { replace: true, state: response });
-          // loadVendorLogUpdates();
-
-          // navigate("/vendors", { replace: true });
+          }
         })
         .catch((e) => {
           alert(e);
-        })
-        .finally(() => {
-          setLoading(false);
+          // console.log(e);
         });
     }
+
+    setLoading(false);
+  }
+
+  async function SaveDataToLogsTableAndSendEmail(emails) {
+    console.log(selectedPaymentCycle);
+    console.log(selectedPaymentMethod);
+    fetch(SYSTEM_URL + "create_vendor_update_log/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        vendor_id: location.state.vendor_id,
+        vendor_name: location.state.name,
+        old_payment_method: oldPaymentMethod,
+        new_payment_method: selectedPaymentMethod?.label,
+        old_payment_cycle: oldPaymentCycle,
+        new_payment_cycle: selectedPaymentCycle?.label,
+        old_account_manager: oldAccountManager,
+        new_account_manager: selectedAccountManager?.label,
+        old_number:
+          location.state.number?.length > 0
+            ? location.state.number
+            : "no previous number",
+        new_number: number?.length > 0 ? number : "0",
+        old_receiver_name:
+          location.state.owner_name?.length > 0
+            ? location.state.owner_name
+            : "no previous receiver name",
+        new_receiver_name:
+          receiverName?.length > 0 ? receiverName : "np previous one",
+        old_owner_phone: "string",
+        new_owner_phone: "string",
+
+        old_fully_refended:
+          location.state.fully_refunded === "yes" ? "true" : "false",
+        new_fully_refended: fully_refunded.toString(),
+        old_penalized: location.state.penalized === "yes" ? "true" : "false",
+        new_panelized: penalized.toString(),
+        old_emails:
+          Object.values(location.state.owner_email_json)?.length > 0
+            ? location.state.owner_email_json?.map((i) => i.title)?.toString()
+            : "no previous emails",
+        new_emails:
+          Object.values(emails)?.length > 0
+            ? emails?.map((i) => i.title)?.toString()
+            : "no previous emails",
+        created_by: localStorage.getItem("user_id"),
+      }),
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          return response.json();
+        } else {
+          return {};
+        }
+      })
+      .then((response) => {
+        console.log(response);
+        if (Object.values(response).length > 0) {
+          swal("Done!", {
+            text: "Email Updates Sent",
+            icon: "success",
+            buttons: true,
+            // dangerMode: true,
+          });
+        } else {
+          swal("Failed To Send Email !", {
+            text: "Failed To Send Email",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          });
+        }
+      })
+      .catch((e) => {
+        alert(e);
+        // console.log(e);
+      });
   }
 
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
   const itemsPerPage = 15;
-  async function loadData(page = 1) {
+  async function loadVendorUpdatesLogs(page = 1) {
     setLoading(true);
     await fetch(
       SYSTEM_URL +
-        `vendor_single_update_logs/${location.state.vendor_id}/?page=${page}`,
+        `vendor_single_update_logs/${location.state.vendor_id}?page=${page}`,
       {
         method: "GET",
         headers: {
@@ -352,7 +405,7 @@ function VendorDetailsPage() {
 
   useEffect(() => {
     setLoading(true);
-    loadData();
+    loadVendorUpdatesLogs();
     loadPaymentsMethod();
     loadPaymentsCycle();
     loadAccountManagers();
@@ -364,6 +417,15 @@ function VendorDetailsPage() {
 
     setLoading(false);
   }, []);
+
+  const totalPages = Math.ceil(data.count / itemsPerPage);
+
+  const changePage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      loadVendorUpdatesLogs(page);
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <>
@@ -462,6 +524,11 @@ function VendorDetailsPage() {
                     <td>Account Manager</td>
                     <td>
                       <Select
+                        isDisabled={
+                          localStorage.getItem("is_superuser") === "true"
+                            ? false
+                            : true
+                        }
                         defaultValue={selectedAccountManager}
                         options={accountManagersDropDown}
                         onChange={(opt) => {
@@ -623,6 +690,129 @@ function VendorDetailsPage() {
               >
                 <b> Update</b>
               </button>
+            </div>
+          </div>
+
+          <div className="container-fluid">
+            <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+              {data.count} Vendors Logs
+            </p>
+
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(1)}
+            >
+              &laquo; First
+            </button>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(currentPage - 1)}
+            >
+              &lsaquo; Prev
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(currentPage + 1)}
+            >
+              Next &rsaquo;
+            </button>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(totalPages)}
+            >
+              Last &raquo;
+            </button>
+          </div>
+
+          <div
+            className="container-fluid text-center"
+            style={{
+              overflowX: "auto",
+              width: "100%",
+              fontSize: "14px",
+            }}
+          >
+            <div className="container-fluid mt-2 mb-2">
+              <p className="text-danger mt-2 mb-2">
+                <b>Vendor Log</b>
+              </p>
+
+              <div className="container-fluid" style={{ overflowX: "auto" }}>
+                <table
+                  className="table table-sm table-striped table-hover text-center"
+                  style={{ fontSize: "12px" }}
+                >
+                  <thead>
+                    <tr>
+                      {/* <th>Old Name</th>
+                  <th>New Name</th> */}
+                      <th>Index</th>
+                      <th>Vendor ID</th>
+                      <th>Vendor Name</th>
+                      <th>Old Payment Method</th>
+                      <th>New Payment Method </th>
+                      <th>Old Payment Cycle</th>
+                      <th>New Payment Cycle </th>
+                      <th>Old Number</th>
+                      <th>New Number </th>
+                      <th>Old Payment Receiver Name</th>
+                      <th>New Payment Receiver Name </th>
+                      {/* <th>Old Owner Phone</th>
+                  <th>New Owner Phone </th> */}
+                      <th>Old Account Manager</th>
+                      <th>New Account Manager </th>
+                      <th>Old Fully Refended</th>
+                      <th>New Fully Refended </th>
+                      <th>Old Penalized</th>
+                      <th>New Penalized </th>
+                      <th>Old Emails</th>
+                      <th>New Emails </th>
+                      <th>Created At </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedData.map((item, index) => (
+                      <tr key={item.vendor_id + Math.random() * 10}>
+                        <td>{index + 1}</td>
+                        <td>{item.vendor_id}</td>
+                        <td>{item.vendor_name}</td>
+                        <td>{item.old_payment_method}</td>
+                        <td>{item.new_payment_method}</td>
+                        <td>{item.old_payment_cycle}</td>
+                        <td>{item.new_payment_cycle}</td>
+                        <td>{item.old_number}</td>
+                        <td>{item.new_number}</td>
+                        <td>{item.old_receiver_name}</td>
+                        <td>{item.new_receiver_name}</td>
+                        <td>{item.old_account_manager}</td>
+                        <td>{item.new_account_manager}</td>
+                        <td>{item.old_fully_refended}</td>
+                        <td>{item.new_fully_refended}</td>
+                        <td>{item.old_penalized}</td>
+                        <td>{item.new_panelized}</td>
+                        <td>
+                          {item.old_emails.split(",").map((i, index) => (
+                            <tr className="text-center">
+                              <td>{i}</td>
+                            </tr>
+                          ))}
+                        </td>
+                        <td>
+                          {item.new_emails.split(",").map((i) => (
+                            <tr className="text-center">
+                              <td>{i}</td>
+                            </tr>
+                          ))}
+                        </td>
+                        <td>{formatDate(item.created_at)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
