@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SYSTEM_URL, formatDate } from "../../global";
+import { SYSTEM_URL, formatDate, randomInt } from "../../global";
 import NavBar from "../navbar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ const PaidVendorsPage = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.results);
+        // console.log(data.results);
         if (data.code === "token_not_valid") {
           navigate("/login", { replace: true });
         }
@@ -122,7 +122,7 @@ const PaidVendorsPage = () => {
                 {paginatedData
                   .map(({ created_by, id, is_paid, ...rest }) => rest)
                   .map((i) => (
-                    <tr key={i.vendor_id + Math.random() * 10}>
+                    <tr key={randomInt(1, 100000000)}>
                       <td>{i.vendor_id}</td>
                       <td>{i.vendor}</td>
                       <td>

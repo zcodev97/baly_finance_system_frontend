@@ -29,34 +29,34 @@ function VendorsPage() {
     setFile(event.target.files[0]);
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  //   const formData = new FormData();
-  //   formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-  //   try {
-  //     const response = await axios.post(
-  //       SYSTEM_URL + "upload_vendors_as_excel/",
+    try {
+      const response = await axios.post(
+        SYSTEM_URL + "upload_vendors_as_excel/",
 
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     );
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-  //     // console.log(response.data);
-  //   } catch (error) {
-  //     console.error("Error uploading file:", error);
-  //   }
-  // };
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
 
   async function loadData(page = 1) {
     setLoading(true);
-    await fetch(SYSTEM_URL + `vendors/?page=${page}`, {
+    await fetch(SYSTEM_URL + `get_vendors_details_info/?page=${page}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -68,12 +68,16 @@ function VendorsPage() {
         if (data.code === "token_not_valid") {
           navigate("/login", { replace: true });
         }
-        data.results?.map((i) => {
-          i.pay_period = i.pay_period.title;
-          i.pay_type = i.pay_type.title;
-          i.fully_refunded = i.fully_refunded ? "yes" : "no";
-          i.penalized = i.penalized ? "yes" : "no";
-        });
+        console.log(data.results);
+        // data.results?.map((i) => {
+        //   i.pay_period = i.pay_period.title;
+        //   i.pay_type = i.pay_type.title;
+        //   i.fully_refunded = i.fully_refunded ? "yes" : "no";
+        //   i.penalized = i.penalized ? "yes" : "no";
+        //   i.commission_after_discount = i.commission_after_discount
+        //     ? "yes"
+        //     : "no";
+        // });
         setData(data);
         setPaginatedData(data.results);
       })
@@ -88,10 +92,10 @@ function VendorsPage() {
   const [selectedVendor, setSelectedVendor] = useState({});
   const [vendorsDropDownMenu, setVendorsDropDownMenu] = useState([]);
   let vendorTempDropDownMenu = [];
-  async function loadVendors() {
+  async function loadVendorsDropDownMenu() {
     setLoading(true);
 
-    fetch(SYSTEM_URL + "get_vendor_id_name/", {
+    fetch(SYSTEM_URL + "api/matched-vendors/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -105,8 +109,8 @@ function VendorsPage() {
         }
         response.forEach((i) => {
           vendorTempDropDownMenu.push({
-            label: i.name,
-            value: i.vendor_id,
+            label: i.arName,
+            value: i.id,
           });
         });
         setVendorsDropDownMenu(vendorTempDropDownMenu);
@@ -148,7 +152,7 @@ function VendorsPage() {
   useEffect(() => {
     setLoading(true);
     loadData();
-    loadVendors();
+    loadVendorsDropDownMenu();
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
 
@@ -223,7 +227,7 @@ function VendorsPage() {
               Last &raquo;
             </button>
           </div>
-          {/* <div className="container mt-2 mb-2 text-center d-flex">
+          <div className="container mt-2 mb-2 text-center d-flex">
             <form onSubmit={handleSubmit}>
               <input
                 type="file"
@@ -238,7 +242,7 @@ function VendorsPage() {
             >
               Upload
             </button>
-          </div> */}
+          </div>
 
           <div
             className="container-fluid text-center"
@@ -260,21 +264,23 @@ function VendorsPage() {
                     <th>Payment Receiver Name </th>
                     <th>Fully Refended</th>
                     <th>Penalized</th>
+                    <th>Commission After Discount</th>
                     <th>Created At</th>
                     <th>Account Manager</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedData.map((item) => (
-                    <tr className="align-middle" key={randomInt(1, 1000000)}>
-                      <td>{item.vendor_id}</td>
-                      <td>{item.name}</td>
-                      <td>{item.pay_period}</td>
-                      <td>{item.pay_type}</td>
+                    <tr className="align-middle" key={randomInt(1, 100000000)}>
+                      <td>{item.vendor_id.id}</td>
+                      <td>{item.vendor_id.arName}</td>
+                      <td>{item.pay_period.title}</td>
+                      <td>{item.pay_type.title}</td>
                       <td>{item.number}</td>
-                      <td>{item.owner_name}</td>
-                      <td>{item.fully_refunded}</td>
-                      <td>{item.penalized}</td>
+                      <td>{item.payment_receiver_name}</td>
+                      <td>{item.fully_refunded.toString()}</td>
+                      <td>{item.penalized.toString()}</td>
+                      <td>{item.commission_after_discount.toString()}</td>
                       <td>
                         {new Date(item.created_at).toISOString().slice(0, 10)}
                       </td>

@@ -31,18 +31,22 @@ function VendorDetailsPage() {
   const [fully_refunded, set_fully_refunded] = useState(
     location.state.fully_refunded === "no" ? false : true
   );
+  const [commission_after_discount, setcommission_after_discount] = useState(
+    location.state.commission_after_discount === "no" ? false : true
+  );
 
   const setPenalizedCheckBoxButton = (e) => {
     const { name, checked } = e.target;
     setPenalized(checked);
-    // console.log(name);
-    // console.log(checked);
   };
 
   const setFullyRefendedCheckBoxButton = (e) => {
     const { name, checked } = e.target;
     set_fully_refunded(checked);
-    // console.log(name);
+  };
+  const setCommissionAfterDiscountCheckBoxButton = (e) => {
+    const { name, checked } = e.target;
+    setcommission_after_discount(checked);
   };
 
   const [rows, setRows] = useState([
@@ -62,14 +66,6 @@ function VendorDetailsPage() {
   const handleChange = (index, key, value) => {
     const newRows = [...rows];
     newRows[index][key] = value;
-
-    // // Update the total price when count or price changes
-    // if (key === "count" || key === "price") {
-    //   const count = parseInt(newRows[index]["count"]) || 0;
-    //   const price = parseFloat(newRows[index]["price"]) || 0;
-    //   newRows[index]["total"] = (count * price).toFixed(2);
-    // }
-
     setRows(newRows);
   };
 
@@ -211,8 +207,6 @@ function VendorDetailsPage() {
       });
   }
 
-  // let emails = location.state.owner_email_json;
-
   function ValidateEmail(input) {
     var validRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -258,6 +252,7 @@ function VendorDetailsPage() {
           owner_email_json: emails,
           fully_refunded: fully_refunded,
           penalized: penalized,
+          commission_after_discount: commission_after_discount,
         }),
       })
         .then((response) => {
@@ -324,6 +319,9 @@ function VendorDetailsPage() {
         new_fully_refended: fully_refunded.toString(),
         old_penalized: location.state.penalized === "yes" ? "true" : "false",
         new_panelized: penalized.toString(),
+        old_commission_after_discount:
+          location.state.commission_after_discount === "yes" ? "true" : "false",
+        new_commission_after_discount: commission_after_discount.toString(),
         old_emails:
           Object.values(location.state.owner_email_json)?.length > 0
             ? location.state.owner_email_json?.map((i) => i.title)?.toString()
@@ -584,6 +582,7 @@ function VendorDetailsPage() {
                       </div>
                     </td>
                   </tr>
+
                   <tr>
                     <td>Fully Refended </td>
                     <td>
@@ -595,6 +594,23 @@ function VendorDetailsPage() {
                           name="fully_refended"
                           id="fully_refended"
                           onChange={setFullyRefendedCheckBoxButton}
+                        />
+
+                        <div className="p-2"></div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Commission After Discount </td>
+                    <td>
+                      <div>
+                        <input
+                          checked={commission_after_discount}
+                          className="form-check-input"
+                          type="checkbox"
+                          name="fully_refended"
+                          id="fully_refended"
+                          onChange={setCommissionAfterDiscountCheckBoxButton}
                         />
 
                         <div className="p-2"></div>
@@ -766,6 +782,8 @@ function VendorDetailsPage() {
                       <th>New Fully Refended </th>
                       <th>Old Penalized</th>
                       <th>New Penalized </th>
+                      <th>Old Commission After Discount</th>
+                      <th>New Commission After Discount </th>
                       <th>Old Emails</th>
                       <th>New Emails </th>
                       <th>Created At </th>
@@ -773,7 +791,10 @@ function VendorDetailsPage() {
                   </thead>
                   <tbody>
                     {paginatedData.map((item, index) => (
-                      <tr className="align-middle" key={randomInt(1, 10000000)}>
+                      <tr
+                        className="align-middle"
+                        key={randomInt(1, 100000000)}
+                      >
                         <td>{index + 1}</td>
                         <td>{item.vendor_id}</td>
                         <td>{item.vendor_name}</td>
@@ -791,6 +812,8 @@ function VendorDetailsPage() {
                         <td>{item.new_fully_refended}</td>
                         <td>{item.old_penalized}</td>
                         <td>{item.new_panelized}</td>
+                        <td>{item.old_commission_after_discount}</td>
+                        <td>{item.new_commission_after_discount}</td>
                         <td>
                           {item.old_emails.split(",").map((i, index) => (
                             <tr className="text-center">

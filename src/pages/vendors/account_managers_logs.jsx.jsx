@@ -5,7 +5,7 @@ import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { SYSTEM_URL, formatDate } from "../../global";
+import { SYSTEM_URL, formatDate, randomInt } from "../../global";
 import Loading from "../loading";
 import NavBar from "../navbar";
 import axios from "axios";
@@ -204,7 +204,7 @@ function AccountManagersLogsPage() {
                   style={{ fontSize: "12px" }}
                 >
                   <thead>
-                    <tr>
+                    <tr className="align-middle">
                       {/* <th>Old Name</th>
                   <th>New Name</th> */}
                       <th>Index</th>
@@ -226,6 +226,8 @@ function AccountManagersLogsPage() {
                       <th>New Fully Refended </th>
                       <th>Old Penalized</th>
                       <th>New Penalized </th>
+                      <th>Old Commission After Discount</th>
+                      <th>New Commission After Discount </th>
                       <th>Old Emails</th>
                       <th>New Emails </th>
                       <th>Created At </th>
@@ -233,7 +235,10 @@ function AccountManagersLogsPage() {
                   </thead>
                   <tbody>
                     {paginatedData.map((item, index) => (
-                      <tr key={item.vendor_id + Math.random() * 10}>
+                      <tr
+                        className="align-middle"
+                        key={randomInt(1, 100000000)}
+                      >
                         <td>{index + 1}</td>
                         <td>{item.vendor_id}</td>
                         <td>{item.vendor_name}</td>
@@ -251,6 +256,8 @@ function AccountManagersLogsPage() {
                         <td>{item.new_fully_refended}</td>
                         <td>{item.old_penalized}</td>
                         <td>{item.new_panelized}</td>
+                        <td>{item.old_commission_after_discount}</td>
+                        <td>{item.new_commission_after_discount}</td>
                         <td>
                           {item.old_emails.split(",").map((i, index) => (
                             <tr className="text-center">

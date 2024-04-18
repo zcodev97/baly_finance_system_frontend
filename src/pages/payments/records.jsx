@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SYSTEM_URL, formatDate } from "../../global";
+import { SYSTEM_URL, formatDate, randomInt } from "../../global";
 import NavBar from "../navbar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -184,6 +184,8 @@ function PaymentsPage() {
   }
 
   async function loadPaymentForGivenDate() {
+    console.log(startDate);
+    console.log(endDate);
     setLoading(true);
     setFilteredData([]);
     setData([]);
@@ -192,9 +194,9 @@ function PaymentsPage() {
     setSelectedPaymentMethod("");
     await fetch(
       SYSTEM_URL +
-        `vendor-payments-summary/?start_date=${formatDate(
-          startDate
-        )}&end_date=${formatDate(endDate)}`,
+        `vendor-payments-summary/?start_date=${
+          startDate.toISOString().split("T")[0]
+        }&end_date=${endDate.toISOString().split("T")[0]}`,
       {
         method: "GET",
         headers: {
@@ -229,12 +231,6 @@ function PaymentsPage() {
           setTotalVendors(data.length);
 
           data.map((i) => {
-            // i.to_be_paid = i.to_be_paid.toLocaleString("en-US", {
-            //   style: "currency",
-            //   currency: "IQD",
-            //   minimumFractionDigits: 0,
-            //   maximumFractionDigits: 2,
-            // });
             i.to_be_paid = parseFloat(i.to_be_paid);
             i.is_paid = i.is_paid ? true : false;
             i.created_by = localStorage.getItem("user_id");
@@ -663,7 +659,7 @@ function PaymentsPage() {
                   : Object?.values(
                       filteredData.length > 0 ? filteredData : data
                     )?.map((i, rowIndex) => (
-                      <tr>
+                      <tr key={randomInt(1, 100000000)}>
                         <td>{i.vendor_id}</td>
                         <td>{i.vendor}</td>
                         <td>
