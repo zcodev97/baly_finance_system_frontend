@@ -11,7 +11,7 @@ import NavBar from "../navbar";
 import axios from "axios";
 import Select from "react-select";
 
-function VendorsPage() {
+function VendorsWithoutDetailsPage() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -20,43 +20,9 @@ function VendorsPage() {
   const [paginatedData, setPaginatedData] = useState([]);
   const itemsPerPage = 15;
 
-  const [totalDinar, setTotalDinar] = useState(0);
-  const [totalDollar, setTotalDollar] = useState(0);
-
-  const [file, setFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const response = await axios.post(
-        SYSTEM_URL + "upload_vendors_as_excel/",
-
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
-  };
-
   async function loadData(page = 1) {
     setLoading(true);
-    await fetch(SYSTEM_URL + `get_vendors_details_info/?page=${page}`, {
+    await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +36,7 @@ function VendorsPage() {
         }
 
         setData(data);
-        setPaginatedData(data.results);
+        setPaginatedData(data);
       })
       .catch((error) => {
         alert(error);
@@ -86,7 +52,7 @@ function VendorsPage() {
   async function loadVendorsDropDownMenu() {
     setLoading(true);
 
-    fetch(SYSTEM_URL + "api/matched-vendors/", {
+    fetch(SYSTEM_URL + "api/unmatched-vendors/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -218,22 +184,6 @@ function VendorsPage() {
               Last &raquo;
             </button>
           </div>
-          <div className="container mt-2 mb-2 text-center d-flex">
-            <form onSubmit={handleSubmit}>
-              <input
-                type="file"
-                className="form-control"
-                onChange={handleFileChange}
-              />
-            </form>
-            <button
-              className="btn btn-light rounded"
-              type="submit"
-              onClick={handleSubmit}
-            >
-              Upload
-            </button>
-          </div>
 
           <div
             className="container-fluid text-center"
@@ -249,37 +199,14 @@ function VendorsPage() {
                   <tr className="align-middle">
                     <th>Vendor ID</th>
                     <th>Vendor Name</th>
-                    <th>Payment Cycle </th>
-                    <th>Payment Method</th>
-                    <th>Payment Method Number </th>
-                    <th>Payment Receiver Name </th>
-                    <th>Fully Refended</th>
-                    <th>Penalized</th>
-                    <th>Commission After Discount</th>
-                    <th>Created At</th>
-                    <th>Account Manager</th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedData.map((item) => (
                     <tr className="align-middle" key={randomInt(1, 100000000)}>
-                      <td>{item.vendor_id.id}</td>
-                      <td>{item.vendor_id.arName}</td>
-                      <td>{item.pay_period.title}</td>
-                      <td>{item.pay_type.title}</td>
-                      <td>{item.number}</td>
-                      <td>{item.payment_receiver_name}</td>
-                      <td>{item.fully_refunded.toString()}</td>
-                      <td>{item.penalized.toString()}</td>
-                      <td>{item.commission_after_discount.toString()}</td>
-                      <td>
-                        {new Date(item.created_at).toISOString().slice(0, 10)}
-                      </td>
-                      <td>{item.account_manager_name}</td>
+                      <td>{item.id}</td>
+                      <td>{item.arName}</td>
 
-                      {/* {Object.values(item).map((i) => {
-                        return <td>{i}</td>;
-                      })} */}
                       <td>
                         <button
                           className="btn btn-light text-primary"
@@ -303,4 +230,4 @@ function VendorsPage() {
   );
 }
 
-export default VendorsPage;
+export default VendorsWithoutDetailsPage;

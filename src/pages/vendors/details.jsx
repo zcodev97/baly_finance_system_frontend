@@ -3,10 +3,7 @@ import { SYSTEM_URL, formatDate, randomInt } from "../../global";
 import NavBar from "../navbar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import BootstrapTable from "react-bootstrap-table-next";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import Select from "react-select";
 import Loading from "../loading";
@@ -96,13 +93,13 @@ function VendorDetailsPage() {
 
         setSelectedPaymentMethod(
           dropdownMenupaymentmethodTemp.find(
-            (i) => i.label === location.state.pay_type
+            (i) => i.label === location.state.pay_type.title
           )
         );
 
         setOldPaymentMethod(
           dropdownMenupaymentmethodTemp.filter(
-            (i) => i.label === location.state.pay_type
+            (i) => i.label === location.state.pay_type.title
           )[0]?.label
         );
 
@@ -110,7 +107,6 @@ function VendorDetailsPage() {
       })
       .catch((e) => {
         alert(e);
-        // console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -141,13 +137,13 @@ function VendorDetailsPage() {
 
         setSelectedPaymentCycle(
           dropdownMenupaymentcyclesTemp.find(
-            (i) => i.label === location.state.pay_period
+            (i) => i.label === location.state.pay_period.title
           )
         );
 
         setOldPaymentCycle(
           dropdownMenupaymentcyclesTemp.filter(
-            (i) => i.label === location.state.pay_period
+            (i) => i.label === location.state.pay_period.title
           )[0]?.label
         );
 
@@ -235,7 +231,7 @@ function VendorDetailsPage() {
       return;
     } else {
       setLoading(true);
-      fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id, {
+      fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -294,8 +290,8 @@ function VendorDetailsPage() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       body: JSON.stringify({
-        vendor_id: location.state.vendor_id,
-        vendor_name: location.state.name,
+        vendor_id: location.state.vendor_id.id,
+        vendor_name: location.state.vendor_id.arName,
         old_payment_method: oldPaymentMethod,
         new_payment_method: selectedPaymentMethod?.label,
         old_payment_cycle: oldPaymentCycle,
@@ -373,7 +369,7 @@ function VendorDetailsPage() {
     setLoading(true);
     await fetch(
       SYSTEM_URL +
-        `vendor_single_update_logs/${location.state.vendor_id}?page=${page}`,
+        `vendor_single_update_logs/${location.state.vendor_id.id}?page=${page}`,
       {
         method: "GET",
         headers: {
@@ -406,7 +402,6 @@ function VendorDetailsPage() {
     loadPaymentsCycle();
     loadAccountManagers();
     setPaymentReceiverName(location.state.owner_name);
-    setOwnerPhoneNumber(location.state.owner_phone);
     setNumber(location.state.number);
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -465,7 +460,7 @@ function VendorDetailsPage() {
                         className="form-control text-center"
                         id="username"
                         style={{ fontSize: "20px" }}
-                        defaultValue={location.state.vendor_id}
+                        defaultValue={location.state.vendor_id.id}
                       />
                     </td>
                   </tr>
@@ -483,7 +478,7 @@ function VendorDetailsPage() {
                         className="form-control text-center"
                         id="username"
                         style={{ fontSize: "20px" }}
-                        defaultValue={location.state.name}
+                        defaultValue={location.state.vendor_id.arName}
                       />
                     </td>
                   </tr>

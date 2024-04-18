@@ -10,6 +10,7 @@ import PaidVendorsPage from "./pages/paid vendors/records";
 import PaidVendorOrdersPage from "./pages/paid vendors/details";
 import VendorDetailsPage from "./pages/vendors/details";
 import AccountManagersLogsPage from "./pages/vendors/account_managers_logs.jsx";
+import VendorsWithoutDetailsPage from "./pages/vendors/vendors_without_details.jsx";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
 
               <Route path="/login" element={<LoginPage />} />
               <Route path="/vendors" element={<VendorsPage />} />
+              <Route
+                path="/vendors_without_details"
+                element={<VendorsWithoutDetailsPage />}
+              />
               <Route
                 path="/account_managers_vendors_logs"
                 element={<AccountManagersLogsPage />}

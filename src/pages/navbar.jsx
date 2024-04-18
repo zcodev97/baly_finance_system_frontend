@@ -50,9 +50,19 @@ function NavBar() {
                     activeLink === "vendors" ? "active-link" : ""
                   }`}
                   to="/vendors"
-                  style={{ fontSize: "20px", color: "red" }}
                 >
-                  <i className="fi fi-rs-bells"></i>
+                  <h5>Vendors</h5>
+                </Link>
+              </li>
+              <li className="nav-item rounded m-1">
+                <Link
+                  onClick={() => handleLinkClick("vendors")}
+                  className={`${navLinkClassName} ${
+                    activeLink === "vendors" ? "active-link" : ""
+                  }`}
+                  to="/vendors_without_details"
+                >
+                  <h5>Vendors Without Details</h5>
                 </Link>
               </li>
               <li className="nav-item rounded m-1">
@@ -78,7 +88,7 @@ function NavBar() {
                   <h5>Logs</h5>
                 </Link>
               </li>
-              <li className="nav-item rounded m-1">
+              {/* <li className="nav-item rounded m-1">
                 <Link className={navLinkClassName} to="/payments">
                   <h5>Create Payment</h5>
                 </Link>
@@ -87,7 +97,7 @@ function NavBar() {
                 <Link className={navLinkClassName} to="/paid_vendors">
                   <h5>Payments</h5>
                 </Link>
-              </li>
+              </li> */}
 
               <li className="nav-item   text-start m-1 p-2 ">
                 <b className="text-dark">{localStorage.getItem("username")}</b>
