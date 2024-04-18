@@ -139,7 +139,7 @@ function VendorsWithoutDetailsPage() {
         >
           <div className="container-fluid">
             <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-              {data.count} Vendors
+              {data.length} Vendors
             </p>
             <div className="container-fluid mt-4 mb-4 text-start">
               <div style={{ width: "300px" }}>
@@ -212,7 +212,7 @@ function VendorsWithoutDetailsPage() {
                           className="btn btn-light text-primary"
                           onClick={() => {
                             console.log(item);
-                            navigate("/vendor_details", { state: item });
+                            navigate("/fill_vendors_details", { state: item });
                           }}
                         >
                           <b>Details</b>
