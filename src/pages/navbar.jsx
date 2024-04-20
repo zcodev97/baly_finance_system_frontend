@@ -4,6 +4,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import Loading from "./loading";
 // db password Qymbg5QhNbAzRn!
 import "@flaticon/flaticon-uicons/css/all/all.css";
+import { SYSTEM_URL } from "../global";
 function NavBar() {
   const navigate = useNavigate();
 
@@ -11,7 +12,59 @@ function NavBar() {
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
+  const [data, setData] = useState([]);
 
+  async function loadData(page = 1) {
+    setLoading(true);
+    await fetch(SYSTEM_URL + `get_vendors_details_info/?page=${page}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+
+        setData(data);
+      })
+      .catch((error) => {
+        alert(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  const [vendorsWIthoutInfo, setVendorsWithoutInfo] = useState([]);
+
+  async function loadVendorsWithoutDetails(page = 1) {
+    setLoading(true);
+    await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+
+        setVendorsWithoutInfo(data);
+      })
+      .catch((error) => {
+        alert(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
   let navLinkClassName = "nav-link text-dark";
 
   const [loading, setLoading] = useState(false);
@@ -24,6 +77,11 @@ function NavBar() {
     setLoading(false);
     navigate("/login", { replace: true });
   }
+
+  useEffect(() => {
+    loadData();
+    loadVendorsWithoutDetails();
+  }, []);
 
   if (loading) {
     return (
@@ -51,7 +109,9 @@ function NavBar() {
                   }`}
                   to="/vendors"
                 >
-                  <h5>Vendors</h5>
+                  <p style={{ fontSize: "18px" }}>
+                    <b> {data.count}</b> Vendors
+                  </p>
                 </Link>
               </li>
               <li className="nav-item rounded m-1">
@@ -62,10 +122,12 @@ function NavBar() {
                   }`}
                   to="/vendors_without_details"
                 >
-                  <h5>Vendors Without Details</h5>
+                  <p style={{ fontSize: "18px" }}>
+                    <b> {vendorsWIthoutInfo.length}</b> Vendors Need Actions{" "}
+                  </p>
                 </Link>
               </li>
-              <li className="nav-item rounded m-1">
+              {/* <li className="nav-item rounded m-1">
                 <Link
                   onClick={() => handleLinkClick("vendors")}
                   className={`${navLinkClassName} ${
@@ -75,7 +137,7 @@ function NavBar() {
                 >
                   <h5>Vendors</h5>
                 </Link>
-              </li>
+              </li> */}
 
               <li className="nav-item rounded m-1">
                 <Link

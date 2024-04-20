@@ -215,11 +215,15 @@ function FillVendorDetailsInfoPage() {
         })
         .then(async (response) => {
           if (Object.values(response).length > 0) {
-            // await SaveDataToLogsTableAndSendEmail(emails);
+            swal("Data Saved !", {
+              text: `Data Saved and Email Sent For creating new Vendor`,
+              dangerMode: false,
+            });
+            await SaveDataToLogsTableAndSendEmail(emails);
             navigate("/vendors", { replace: true });
           } else {
             swal("Failed To Save Data to DB !", {
-              text: "Data not saved and Email is not Sent",
+              text: `Data not saved and Email is not Sent`,
               icon: "warning",
               buttons: true,
               dangerMode: true,
@@ -228,7 +232,6 @@ function FillVendorDetailsInfoPage() {
         })
         .catch((e) => {
           alert(e);
-          // console.log(e);
         });
     }
 
@@ -246,36 +249,26 @@ function FillVendorDetailsInfoPage() {
       body: JSON.stringify({
         vendor_id: location.state.id,
         vendor_name: location.state.arName,
-        old_payment_method: oldPaymentMethod,
+        old_payment_method: "no old_payment_method ",
         new_payment_method: selectedPaymentMethod?.label,
-        old_payment_cycle: oldPaymentCycle,
+        old_payment_cycle: "no old_payment_cycle",
         new_payment_cycle: selectedPaymentCycle?.label,
-        old_account_manager: oldAccountManager,
+        old_account_manager: "no old_account_manager",
         new_account_manager: selectedAccountManager?.label,
-        old_number:
-          location.state.number?.length > 0 ? location.state.number : "0",
+        old_number: "no old_number",
         new_number: number?.length > 0 ? number : "0",
-        old_receiver_name:
-          location.state.owner_name?.length > 0
-            ? location.state.owner_name
-            : "no old receiver name",
-        new_receiver_name:
-          receiverName?.length > 0 ? receiverName : "no new receiver name",
+        old_receiver_name: "no old receiver name",
+        new_receiver_name: receiverName,
         old_owner_phone: "string",
         new_owner_phone: "string",
 
-        old_fully_refended:
-          location.state.fully_refunded === "yes" ? "true" : "false",
+        old_fully_refended: "no old_fully_refended",
         new_fully_refended: fully_refunded.toString(),
-        old_penalized: location.state.penalized === "yes" ? "true" : "false",
+        old_penalized: "no old_penalized",
         new_panelized: penalized.toString(),
-        old_commission_after_discount:
-          location.state.commission_after_discount === "yes" ? "true" : "false",
+        old_commission_after_discount: "no old_commission_after_discount",
         new_commission_after_discount: commission_after_discount.toString(),
-        old_emails:
-          Object.values(location.state.owner_email_json)?.length > 0
-            ? location.state.owner_email_json?.map((i) => i.title)?.toString()
-            : "no emails",
+        old_emails: "no old_emails",
         new_emails:
           Object.values(emails)?.length > 0
             ? emails?.map((i) => i.title)?.toString()
@@ -295,14 +288,14 @@ function FillVendorDetailsInfoPage() {
           swal("Done!", {
             text: "Email Updates Sent",
             icon: "success",
-            buttons: true,
+            // buttons: true,
             // dangerMode: true,
           });
         } else {
           swal("Failed To Send Email !", {
             text: "Failed To Send Email",
             icon: "warning",
-            buttons: true,
+            // buttons: true,
             dangerMode: true,
           });
         }
@@ -595,12 +588,62 @@ function FillVendorDetailsInfoPage() {
                 className="btn btn-success  mt-2 mb-2"
                 onClick={() => {
                   swal({
-                    text: `Are You Sure to Update ${location.state.name} Vendor`,
+                    text: `Are You Sure to Update ${location.state.arName} Vendor`,
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
                   }).then((willDelete) => {
                     if (willDelete) {
+                      if (selectedPaymentMethod.length === 0) {
+                        swal("Error!", {
+                          text: "Please Fill Payment Method",
+                          icon: "warning",
+                          // buttons: true,
+                          dangerMode: true,
+                        });
+                        return;
+                      }
+
+                      if (selectedPaymentCycle.length === 0) {
+                        swal("Error!", {
+                          text: "Please Fill Payment Cycle",
+                          icon: "warning",
+                          // buttons: true,
+                          dangerMode: true,
+                        });
+                        return;
+                      }
+
+                      if (selectedAccountManager.length === 0) {
+                        swal("Error!", {
+                          text: "Please Fill Account Manager",
+                          icon: "warning",
+                          // buttons: true,
+                          dangerMode: true,
+                        });
+                        return;
+                      }
+
+                      if (number.length === 0) {
+                        swal("Error!", {
+                          text: "Please Fill Payment Method Number",
+                          icon: "warning",
+                          // buttons: true,
+                          dangerMode: true,
+                        });
+                        return;
+                      }
+
+                      if (receiverName.length === 0) {
+                        swal("Error!", {
+                          text: "Please Fill Payment Receiver Name",
+                          icon: "warning",
+                          // buttons: true,
+                          dangerMode: true,
+                        });
+                        return;
+                      }
+
                       updateVendorInfo();
                     } else {
                       swal("You Cancelled the Operation!");
