@@ -18,8 +18,8 @@ const randomInt = (min, max) =>
     ? Math.floor(Math.random() * min)
     : min + Math.floor(Math.random() * (max - min + 1));
 
-// const SYSTEM_URL = "http://38.180.105.203:8010/";
-const SYSTEM_URL = "http://localhost:8000/";
+const SYSTEM_URL = "http://38.180.105.203:8010/";
+// const SYSTEM_URL = "http://localhost:8000/";
 // const SYSTEM_URL = "http://18.158.82.59:8010/";
 
 export { formatDate, SYSTEM_URL, randomInt };
