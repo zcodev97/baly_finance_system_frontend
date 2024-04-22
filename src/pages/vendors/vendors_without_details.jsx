@@ -109,7 +109,7 @@ function VendorsWithoutDetailsPage() {
   useEffect(() => {
     setLoading(true);
     loadData();
-    loadVendorsDropDownMenu();
+    // loadVendorsDropDownMenu();
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
 
@@ -139,23 +139,9 @@ function VendorsWithoutDetailsPage() {
         >
           <div className="container-fluid">
             <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-              {data.length} Vendors
+              {data.length} Vendors Need Actions
             </p>
-            <div className="container-fluid mt-4 mb-4 text-start">
-              <div style={{ width: "300px" }}>
-                Search By Vendor
-                <Select
-                  defaultValue={selectedVendor}
-                  options={vendorsDropDownMenu}
-                  onChange={(opt) => {
-                    setSelectedVendor(opt);
-                    // get selected vendor info and navigate to vendor details page
-                    getSingleVendor(opt.value);
-                  }}
-                  value={selectedVendor}
-                />
-              </div>
-            </div>
+
             <button
               className="btn btn-primary m-1"
               onClick={() => changePage(1)}

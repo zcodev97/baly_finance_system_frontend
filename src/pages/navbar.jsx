@@ -109,6 +109,17 @@ function NavBar() {
                   }`}
                   to="/vendors"
                 >
+                  <p style={{ fontSize: "18px" }}></p>
+                </Link>
+              </li>
+              <li className="nav-item rounded m-1">
+                <Link
+                  onClick={() => handleLinkClick("vendors")}
+                  className={`${navLinkClassName} ${
+                    activeLink === "vendors" ? "active-link" : ""
+                  }`}
+                  to="/vendors"
+                >
                   <p style={{ fontSize: "18px" }}>
                     <b> {data.count}</b> Vendors
                   </p>
@@ -127,17 +138,6 @@ function NavBar() {
                   </p>
                 </Link>
               </li>
-              {/* <li className="nav-item rounded m-1">
-                <Link
-                  onClick={() => handleLinkClick("vendors")}
-                  className={`${navLinkClassName} ${
-                    activeLink === "vendors" ? "active-link" : ""
-                  }`}
-                  to="/vendors"
-                >
-                  <h5>Vendors</h5>
-                </Link>
-              </li> */}
 
               <li className="nav-item rounded m-1">
                 <Link
@@ -161,12 +161,14 @@ function NavBar() {
                 </Link>
               </li> */}
 
-              <li className="nav-item   text-start m-1 p-2 ">
-                <b className="text-dark">{localStorage.getItem("username")}</b>
+              <li className="nav-item text-start">
+                <Link className="nav-link">
+                  <b>{localStorage.getItem("username")}</b>
+                </Link>
               </li>
               <li className="nav-item rounded m-1">
                 <Link
-                  className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
+                  className="nav-link text-danger"
                   to="/login"
                   onClick={handleLogout}
                 >
