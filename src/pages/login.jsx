@@ -44,7 +44,7 @@ function Login() {
         localStorage.setItem("user_id", data.user.id);
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("is_superuser", data.user.is_superuser);
-        navigate("/payments", { replace: true });
+        navigate("/vendors", { replace: true });
         checkUserLoggedIn = true;
       })
       .catch((error) => {
