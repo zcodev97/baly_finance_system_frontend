@@ -10,13 +10,13 @@ function NavBar() {
 
   const [activeLink, setActiveLink] = useState("");
 
-  const handleLinkClick = (linkName) => {
-    setActiveLink(linkName); // Set the active link state
+  const handleLinkClick = (e, linkName) => {
+    e.preventDefault();
+    setActiveLink(linkName);
   };
   const [data, setData] = useState([]);
 
   async function loadData(page = 1) {
-    setLoading(true);
     await fetch(SYSTEM_URL + `get_vendors_details_info/?page=${page}`, {
       method: "GET",
       headers: {
@@ -34,16 +34,12 @@ function NavBar() {
       })
       .catch((error) => {
         alert(error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }
 
   const [vendorsWIthoutInfo, setVendorsWithoutInfo] = useState([]);
 
   async function loadVendorsWithoutDetails(page = 1) {
-    setLoading(true);
     await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
       method: "GET",
       headers: {
@@ -61,9 +57,6 @@ function NavBar() {
       })
       .catch((error) => {
         alert(error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }
   let navLinkClassName = "nav-link";
@@ -115,19 +108,27 @@ function NavBar() {
                 style={{ marginBottom: "20px" }}
               >
                 <Link
-                  onClick={() => handleLinkClick("vendors")}
-                  className={`${navLinkClassName} ${
-                    activeLink === "vendors" ? "active-link" : ""
-                  }`}
+                  onClick={(e) => handleLinkClick(e, "home")}
+                  className="nav-link"
                   to="/vendors"
                 >
                   <div
-                    style={{
-                      fontSize: "20px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
+                    style={
+                      activeLink === "home"
+                        ? {
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            borderRadius: "3px",
+                          }
+                        : {
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                          }
+                    }
                   >
                     <div>
                       <i class="fi fi-tr-dot-circle"></i>
@@ -141,20 +142,11 @@ function NavBar() {
               <hr />
               <li className="nav-item rounded m-1">
                 <Link
-                  onClick={() => handleLinkClick("vendors")}
-                  className={`${navLinkClassName} ${
-                    activeLink === "vendors" ? "active-link" : ""
-                  }`}
+                  onClick={(e) => handleLinkClick(e, "profile")}
+                  className="nav-link"
                   to="/vendors"
                 >
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
-                  >
+                  <div>
                     <div></div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       <li className="nav-item text-start">
@@ -168,19 +160,31 @@ function NavBar() {
               <hr />
               <li className="nav-item rounded m-1">
                 <Link
-                  onClick={() => handleLinkClick("vendors")}
-                  className={`nav-link ${
-                    activeLink === "vendors" ? "active-link" : ""
-                  }`}
+                  onClick={(e) => handleLinkClick(e, "vendors")}
+                  className="nav-link"
                   to="/vendors"
                 >
                   <div
-                    style={{
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
+                    style={
+                      activeLink === "vendors"
+                        ? {
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                            padding: "10px",
+                            borderRadius: "3px",
+                          }
+                        : {
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                          }
+                    }
                   >
                     <div>
                       <i class="fi fi-ss-circle"></i>
@@ -193,19 +197,31 @@ function NavBar() {
               </li>
               <li className="nav-item rounded m-1">
                 <Link
-                  onClick={() => handleLinkClick("vendors")}
-                  className={`nav-link ${
-                    activeLink === "vendors" ? "active-link" : ""
-                  }`}
+                  onClick={(e) => handleLinkClick(e, "vendors_no_info")}
+                  className="nav-link"
                   to="/vendors_without_details"
                 >
                   <div
-                    style={{
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
+                    style={
+                      activeLink === "vendors_no_info"
+                        ? {
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                            padding: "10px",
+                            borderRadius: "3px",
+                          }
+                        : {
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                          }
+                    }
                   >
                     <div>
                       <i class="fi fi-ss-circle"></i>
@@ -219,19 +235,31 @@ function NavBar() {
 
               <li className="nav-item rounded m-1">
                 <Link
-                  onClick={() => handleLinkClick("vendors")}
-                  className={`${navLinkClassName} ${
-                    activeLink === "vendors" ? "active-link" : ""
-                  }`}
+                  onClick={(e) => handleLinkClick(e, "logs")}
+                  className="nav-link"
                   to="/account_managers_vendors_logs"
                 >
                   <div
-                    style={{
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
+                    style={
+                      activeLink === "logs"
+                        ? {
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                            padding: "10px",
+                            borderRadius: "3px",
+                          }
+                        : {
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                          }
+                    }
                   >
                     <div>
                       <i class="fi fi-ss-circle"></i>
@@ -243,14 +271,32 @@ function NavBar() {
                 </Link>
               </li>
               <li className="nav-item rounded m-1">
-                <Link className={navLinkClassName} to="/payments">
+                <Link
+                  onClick={(e) => handleLinkClick(e, "payments")}
+                  className="nav-link"
+                  to="/payments"
+                >
                   <div
-                    style={{
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
+                    style={
+                      activeLink === "payments"
+                        ? {
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                            padding: "10px",
+                            borderRadius: "3px",
+                          }
+                        : {
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                          }
+                    }
                   >
                     <div>
                       <i class="fi fi-ss-circle"></i>
@@ -262,14 +308,32 @@ function NavBar() {
                 </Link>
               </li>
               <li className="nav-item rounded m-1">
-                <Link className={navLinkClassName} to="/paid_vendors">
+                <Link
+                  onClick={(e) => handleLinkClick(e, "old_payments")}
+                  className="nav-link"
+                  to="/paid_vendors"
+                >
                   <div
-                    style={{
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
+                    style={
+                      activeLink === "old_payments"
+                        ? {
+                            backgroundColor: "#007BFF",
+                            color: "white",
+                            fontWeight: "bold",
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                            padding: "10px",
+                            borderRadius: "3px",
+                          }
+                        : {
+                            fontSize: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            alignContent: "center",
+                          }
+                    }
                   >
                     <div>
                       <i class="fi fi-ss-circle"></i>

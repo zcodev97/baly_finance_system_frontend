@@ -201,7 +201,7 @@ function AccountManagersLogsPage() {
               <div className="container-fluid" style={{ overflowX: "auto" }}>
                 <table
                   className="table table-sm table-striped table-hover text-center"
-                  style={{ fontSize: "12px" }}
+                  style={{ fontSize: "16px" }}
                 >
                   <thead>
                     <tr className="align-middle">

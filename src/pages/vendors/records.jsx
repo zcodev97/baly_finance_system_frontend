@@ -172,7 +172,7 @@ function VendorsPage() {
           style={{ margin: "0px", padding: "0px" }}
         >
           <div className="container-fluid">
-            <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            <p style={{ fontSize: "18px", fontWeight: "bold" }}>
               {data.count} Vendors
             </p>
             <div className="container-fluid mt-4 mb-4 text-start">
@@ -240,7 +240,7 @@ function VendorsPage() {
             style={{
               overflowX: "auto",
               width: "100%",
-              fontSize: "14px",
+              fontSize: "16px",
             }}
           >
             <div className="container-fluid " style={{ overflowX: "auto" }}>
