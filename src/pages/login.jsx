@@ -123,11 +123,13 @@ function Login() {
             style={{
               minHeight: window.innerHeight,
               display: "grid",
-              alignItems: "center",
+              alignContent: "space-evenly",
+              justifyContent: "start",
+              justifyContent: "start",
             }}
           >
             <div
-              className="container-fluid p-4 bg-light  text-center text-dark"
+              className="container-fluid p-4  text-center text-dark"
               style={{
                 borderRadius: "50px",
                 height: "500px",
