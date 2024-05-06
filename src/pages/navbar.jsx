@@ -113,22 +113,12 @@ function NavBar() {
                   to="/vendors"
                 >
                   <div
-                    style={
-                      activeLink === "home"
-                        ? {
-                            backgroundColor: "#007BFF",
-                            color: "white",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                            borderRadius: "3px",
-                          }
-                        : {
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                          }
-                    }
+                    style={{
+                      fontSize: "16px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
                   >
                     <div>
                       <i class="fi fi-tr-dot-circle"></i>
@@ -168,7 +158,7 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "18px",
+                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -194,22 +184,23 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "20px",
+                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
+                      justifyContent: "space-between",
                     }}
                   >
                     <div>
-                      <i class="fi fi-ss-circle"></i>
+                      <i class="fi fi-ss-circle"></i> {" " + "Vendors"}
                     </div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      {data.count} Vendors
+                      {vendorsWIthoutInfo.length}
                     </div>
                   </div>
                 </NavLink>
               </li>
-              <li className="nav-item rounded m-1">
+              {/* <li className="nav-item rounded m-1">
                 <NavLink
                   style={{ textDecoration: "none" }}
                   className={({ isActive }) =>
@@ -219,7 +210,7 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "20px",
+                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -233,7 +224,7 @@ function NavBar() {
                     </div>
                   </div>
                 </NavLink>
-              </li>
+              </li> */}
               <li className="nav-item rounded m-1">
                 <NavLink
                   style={{ textDecoration: "none" }}
@@ -244,7 +235,7 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "20px",
+                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -269,7 +260,7 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "20px",
+                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -294,7 +285,7 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "20px",
+                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",

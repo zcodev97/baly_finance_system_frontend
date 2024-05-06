@@ -181,7 +181,7 @@ function VendorsWithoutDetailsPage() {
           >
             <div
               className="container-fluid "
-              style={{ overflowX: "auto", fontSize: "18px" }}
+              style={{ overflowX: "auto", fontSize: "14px" }}
             >
               <table className="table table-striped table-sm table-hover">
                 <thead>

@@ -139,6 +139,28 @@ function VendorsPage() {
         setLoading(false);
       });
   }
+  const [vendorsWIthoutInfo, setVendorsWithoutInfo] = useState([]);
+
+  async function loadVendorsWithoutDetails(page = 1) {
+    await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+
+        setVendorsWithoutInfo(data);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -146,7 +168,7 @@ function VendorsPage() {
     loadVendorsDropDownMenu();
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-
+    loadVendorsWithoutDetails();
     setLoading(false);
   }, []);
 
@@ -175,6 +197,16 @@ function VendorsPage() {
             <p style={{ fontSize: "18px", fontWeight: "bold" }}>
               {data.count} Vendors
             </p>
+            <div className="container-fluid text-end">
+              <button
+                className="btn btn-light text-danger"
+                onClick={() => {
+                  navigate("/vendors_without_details");
+                }}
+              >
+                <b>⚠️ {vendorsWIthoutInfo.length} Vendors Without Details</b>
+              </button>
+            </div>
             <div className="container-fluid mt-4 mb-4 text-start">
               <div style={{ width: "300px" }}>
                 Search By Vendor
@@ -218,7 +250,7 @@ function VendorsPage() {
               Last &raquo;
             </button>
           </div>
-          {/* <div className="container mt-2 mb-2 text-center d-flex">
+          <div className="container mt-2 mb-2 text-center d-flex">
             <form onSubmit={handleSubmit}>
               <input
                 type="file"
@@ -233,14 +265,14 @@ function VendorsPage() {
             >
               Upload
             </button>
-          </div> */}
+          </div>
 
           <div
             className="container-fluid text-center"
             style={{
               overflowX: "auto",
               width: "100%",
-              fontSize: "16px",
+              fontSize: "14px",
             }}
           >
             <div className="container-fluid " style={{ overflowX: "auto" }}>
