@@ -139,7 +139,7 @@ function VendorsWithoutDetailsPage() {
         >
           <div className="container-fluid">
             <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-              {data.length} Vendors Need Actions
+              {data.length} Vendors Needs Action
             </p>
 
             <button

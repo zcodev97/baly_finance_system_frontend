@@ -238,7 +238,7 @@ function VendorDetailsPage() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          name: location.state.name,
+          name: location.state.vendor_id.arName,
           number: number,
           pay_period: selectedPaymentCycle.value,
           pay_type: selectedPaymentMethod.value,
@@ -684,7 +684,7 @@ function VendorDetailsPage() {
                 className="btn btn-success  mt-2 mb-2"
                 onClick={() => {
                   swal({
-                    text: `Are You Sure to Update ${location.state.name} Vendor`,
+                    text: `Are You Sure to Update ${location.state.vendor_id.arName} Vendor`,
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
