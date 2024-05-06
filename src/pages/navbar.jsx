@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
 import Loading from "./loading";
 // db password Qymbg5QhNbAzRn!
 import "@flaticon/flaticon-uicons/css/all/all.css";
@@ -11,7 +11,7 @@ function NavBar() {
   const [activeLink, setActiveLink] = useState("");
 
   const handleLinkClick = (e, linkName) => {
-    e.preventDefault();
+    // e.preventDefault();
     setActiveLink(linkName);
   };
   const [data, setData] = useState([]);
@@ -142,7 +142,7 @@ function NavBar() {
               <hr />
               <li className="nav-item rounded m-1">
                 <Link
-                  onClick={(e) => handleLinkClick(e, "profile")}
+                  // onClick={(e) => handleLinkClick(e, "profile")}
                   className="nav-link"
                   to="/vendors"
                 >
@@ -157,196 +157,15 @@ function NavBar() {
                   </div>
                 </Link>
               </li>
-              <hr />
               <li className="nav-item rounded m-1">
-                <Link
-                  onClick={(e) => handleLinkClick(e, "vendors")}
-                  className="nav-link"
-                  to="/vendors"
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/login"
+                  onClick={handleLogout}
                 >
-                  <div
-                    style={
-                      activeLink === "vendors"
-                        ? {
-                            backgroundColor: "#007BFF",
-                            color: "white",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                            padding: "10px",
-                            borderRadius: "3px",
-                          }
-                        : {
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                          }
-                    }
-                  >
-                    <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      {data.count} Vendors
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item rounded m-1">
-                <Link
-                  onClick={(e) => handleLinkClick(e, "vendors_no_info")}
-                  className="nav-link"
-                  to="/vendors_without_details"
-                >
-                  <div
-                    style={
-                      activeLink === "vendors_no_info"
-                        ? {
-                            backgroundColor: "#007BFF",
-                            color: "white",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                            padding: "10px",
-                            borderRadius: "3px",
-                          }
-                        : {
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                          }
-                    }
-                  >
-                    <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      <b> {vendorsWIthoutInfo.length}</b> Vendors Need Actions
-                    </div>
-                  </div>
-                </Link>
-              </li>
-
-              <li className="nav-item rounded m-1">
-                <Link
-                  onClick={(e) => handleLinkClick(e, "logs")}
-                  className="nav-link"
-                  to="/account_managers_vendors_logs"
-                >
-                  <div
-                    style={
-                      activeLink === "logs"
-                        ? {
-                            backgroundColor: "#007BFF",
-                            color: "white",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                            padding: "10px",
-                            borderRadius: "3px",
-                          }
-                        : {
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                          }
-                    }
-                  >
-                    <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      Logs
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item rounded m-1">
-                <Link
-                  onClick={(e) => handleLinkClick(e, "payments")}
-                  className="nav-link"
-                  to="/payments"
-                >
-                  <div
-                    style={
-                      activeLink === "payments"
-                        ? {
-                            backgroundColor: "#007BFF",
-                            color: "white",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                            padding: "10px",
-                            borderRadius: "3px",
-                          }
-                        : {
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                          }
-                    }
-                  >
-                    <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      Create Payment
-                    </div>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item rounded m-1">
-                <Link
-                  onClick={(e) => handleLinkClick(e, "old_payments")}
-                  className="nav-link"
-                  to="/paid_vendors"
-                >
-                  <div
-                    style={
-                      activeLink === "old_payments"
-                        ? {
-                            backgroundColor: "#007BFF",
-                            color: "white",
-                            fontWeight: "bold",
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                            padding: "10px",
-                            borderRadius: "3px",
-                          }
-                        : {
-                            fontSize: "20px",
-                            display: "flex",
-                            alignItems: "center",
-                            alignContent: "center",
-                          }
-                    }
-                  >
-                    <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      Payments
-                    </div>
-                  </div>
-                </Link>
-              </li>
-
-              <li className="nav-item rounded m-1">
-                <Link className="nav-link" to="/login" onClick={handleLogout}>
                   <div
                     style={{
                       fontSize: "18px",
@@ -362,7 +181,133 @@ function NavBar() {
                       Sign Out
                     </div>
                   </div>
-                </Link>
+                </NavLink>
+              </li>
+              <hr />
+              <li className="nav-item rounded m-1">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/vendors"
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      {data.count} Vendors
+                    </div>
+                  </div>
+                </NavLink>
+              </li>
+              <li className="nav-item rounded m-1">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/vendors_without_details"
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      <b> {vendorsWIthoutInfo.length}</b> Vendors Need Actions
+                    </div>
+                  </div>
+                </NavLink>
+              </li>
+              <li className="nav-item rounded m-1">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/account_managers_vendors_logs"
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Logs
+                    </div>
+                  </div>
+                </NavLink>
+              </li>
+              <li className="nav-item rounded m-1">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/payments"
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Create Payment
+                    </div>
+                  </div>
+                </NavLink>
+              </li>
+              <li className="nav-item rounded m-1">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/paid_vendors"
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Payments
+                    </div>
+                  </div>
+                </NavLink>
               </li>
             </ul>
           </div>
