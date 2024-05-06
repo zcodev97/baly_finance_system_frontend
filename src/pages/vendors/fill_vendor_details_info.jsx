@@ -261,7 +261,6 @@ function FillVendorDetailsInfoPage() {
         new_receiver_name: receiverName,
         old_owner_phone: "string",
         new_owner_phone: "string",
-
         old_fully_refended: "no old_fully_refended",
         new_fully_refended: fully_refunded.toString(),
         old_penalized: "no old_penalized",

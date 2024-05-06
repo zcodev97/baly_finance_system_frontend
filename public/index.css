@@ -25,6 +25,11 @@ body {
   z-index: 600;
 }
 
+.active-link {
+  color: blue; /* Change the text color to blue */
+  background-color: #d0e0fc; /* Light blue background for better visibility */
+}
+
 @media (max-width: 991.98px) {
   .sidebar {
     width: 100%;

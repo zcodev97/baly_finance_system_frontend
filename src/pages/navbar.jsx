@@ -9,8 +9,9 @@ function NavBar() {
   const navigate = useNavigate();
 
   const [activeLink, setActiveLink] = useState("");
-  const handleLinkClick = (link) => {
-    setActiveLink(link);
+
+  const handleLinkClick = (linkName) => {
+    setActiveLink(linkName); // Set the active link state
   };
   const [data, setData] = useState([]);
 
@@ -65,7 +66,7 @@ function NavBar() {
         setLoading(false);
       });
   }
-  let navLinkClassName = "nav-link text-dark";
+  let navLinkClassName = "nav-link";
 
   const [loading, setLoading] = useState(false);
 
@@ -96,11 +97,48 @@ function NavBar() {
       {/* side bar. */}
       <nav
         id="sidebarMenu"
-        className="collapse d-lg-block sidebar collapse bg-white"
+        className="collapse d-lg-block sidebar collapse"
+        style={{
+          backgroundColor: "#343A40",
+          color: "#EFF0F0",
+          margin: "0px",
+        }}
       >
         <div className="position-sticky">
           <div className="list-group list-group-flush mx-3 mt-1">
-            <ul className="navbar-nav">
+            <ul
+              className="navbar-nav"
+              style={{ color: "#EFF0F0", fontWeight: "bold" }}
+            >
+              <li
+                className="nav-item rounded m-1"
+                style={{ marginBottom: "20px" }}
+              >
+                <Link
+                  onClick={() => handleLinkClick("vendors")}
+                  className={`${navLinkClassName} ${
+                    activeLink === "vendors" ? "active-link" : ""
+                  }`}
+                  to="/vendors"
+                >
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-tr-dot-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Vendors System
+                    </div>
+                  </div>
+                </Link>
+              </li>
+              <hr />
               <li className="nav-item rounded m-1">
                 <Link
                   onClick={() => handleLinkClick("vendors")}
@@ -109,33 +147,73 @@ function NavBar() {
                   }`}
                   to="/vendors"
                 >
-                  <p style={{ fontSize: "18px" }}></p>
+                  <div
+                    style={{
+                      fontSize: "16px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div></div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      <li className="nav-item text-start">
+                        <b>{localStorage.getItem("username")}</b>
+                        <p>{localStorage.getItem("user_type")}</p>
+                      </li>
+                    </div>
+                  </div>
                 </Link>
               </li>
+              <hr />
               <li className="nav-item rounded m-1">
                 <Link
                   onClick={() => handleLinkClick("vendors")}
-                  className={`${navLinkClassName} ${
+                  className={`nav-link ${
                     activeLink === "vendors" ? "active-link" : ""
                   }`}
                   to="/vendors"
                 >
-                  <p style={{ fontSize: "18px" }}>
-                    <b> {data.count}</b> Vendors
-                  </p>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      {data.count} Vendors
+                    </div>
+                  </div>
                 </Link>
               </li>
               <li className="nav-item rounded m-1">
                 <Link
                   onClick={() => handleLinkClick("vendors")}
-                  className={`${navLinkClassName} ${
+                  className={`nav-link ${
                     activeLink === "vendors" ? "active-link" : ""
                   }`}
                   to="/vendors_without_details"
                 >
-                  <p style={{ fontSize: "18px" }}>
-                    <b> {vendorsWIthoutInfo.length}</b> Vendors Need Actions{" "}
-                  </p>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      <b> {vendorsWIthoutInfo.length}</b> Vendors Need Actions
+                    </div>
+                  </div>
                 </Link>
               </li>
 
@@ -147,32 +225,79 @@ function NavBar() {
                   }`}
                   to="/account_managers_vendors_logs"
                 >
-                  <h5>Logs</h5>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Logs
+                    </div>
+                  </div>
                 </Link>
               </li>
-              {/* <li className="nav-item rounded m-1">
+              <li className="nav-item rounded m-1">
                 <Link className={navLinkClassName} to="/payments">
-                  <h5>Create Payment</h5>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Create Payment
+                    </div>
+                  </div>
                 </Link>
               </li>
               <li className="nav-item rounded m-1">
                 <Link className={navLinkClassName} to="/paid_vendors">
-                  <h5>Payments</h5>
-                </Link>
-              </li> */}
-
-              <li className="nav-item text-start">
-                <Link className="nav-link">
-                  <b>{localStorage.getItem("username")}</b>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Payments
+                    </div>
+                  </div>
                 </Link>
               </li>
+
               <li className="nav-item rounded m-1">
-                <Link
-                  className="nav-link text-danger"
-                  to="/login"
-                  onClick={handleLogout}
-                >
-                  <b>Sign Out</b>
+                <Link className="nav-link" to="/login" onClick={handleLogout}>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-rs-arrow-alt-circle-left"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      Sign Out
+                    </div>
+                  </div>
                 </Link>
               </li>
             </ul>
@@ -183,7 +308,7 @@ function NavBar() {
       {/* nav bar */}
       <nav
         id="main-navbar"
-        className="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+        className="navbar navbar-expand-lg navbar-light fixed-top"
       >
         {/* Container wrapper */}
         <button
@@ -205,36 +330,3 @@ function NavBar() {
 }
 
 export default NavBar;
-<nav
-  className="navbar navbar-expand-sm bg-dark  navbar-dark  text-center rounded p-2"
-  id="no-print"
->
-  <div
-    className="container-fluid"
-    style={{
-      display: "flex",
-      color: "white",
-      flexDirection: "row-reverse",
-      alignItems: "center",
-      justifyContent: "end",
-      margin: "0px",
-      padding: "0px",
-    }}
-  >
-    {/* Start of the main navbar content */}
-    <div className="contaier-fluid">
-      <button
-        className="navbar-toggler bg-dark text-end"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-    </div>
-    <div className="collapse navbar-collapse" id="navbarNav"></div>
-  </div>
-</nav>;

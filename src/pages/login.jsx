@@ -44,6 +44,7 @@ function Login() {
         localStorage.setItem("user_id", data.user.id);
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("is_superuser", data.user.is_superuser);
+        localStorage.setItem("user_type", data.user.user_type_object);
         navigate("/vendors", { replace: true });
         checkUserLoggedIn = true;
       })
@@ -77,9 +78,7 @@ function Login() {
             }
           })
           .then((data) => {
-            if (data.detail) {
-              // console.log(data);
-
+            if (data?.detail) {
               alert(data.detail);
               return;
             }
