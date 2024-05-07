@@ -560,7 +560,14 @@ function VendorDetailsPage() {
                     </td>
                   </tr>
 
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        localStorage.getItem("user_type") === "admin"
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Penalized </td>
                     <td>
                       <div>
@@ -578,7 +585,14 @@ function VendorDetailsPage() {
                     </td>
                   </tr>
 
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        localStorage.getItem("user_type") === "admin"
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Fully Refended </td>
                     <td>
                       <div>
@@ -595,7 +609,14 @@ function VendorDetailsPage() {
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        localStorage.getItem("user_type") === "admin"
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Commission After Discount </td>
                     <td>
                       <div>

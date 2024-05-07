@@ -201,9 +201,16 @@ function FillVendorDetailsInfoPage() {
           account_manager: selectedAccountManager.value,
           payment_receiver_name: receiverName,
           owner_email_json: emails,
-          fully_refunded: fully_refunded,
-          penalized: penalized,
-          commission_after_discount: commission_after_discount,
+          fully_refunded:
+            localStorage.getItem("user-type") === "admin"
+              ? fully_refunded
+              : "false",
+          penalized:
+            localStorage.getItem("user-type") === "admin" ? penalized : "false",
+          commission_after_discount:
+            localStorage.getItem("user-type") === "admin"
+              ? commission_after_discount
+              : "false",
         }),
       })
         .then((response) => {
@@ -466,7 +473,14 @@ function FillVendorDetailsInfoPage() {
                     </td>
                   </tr>
 
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        localStorage.getItem("user_type") === "admin"
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Penalized </td>
                     <td>
                       <div>
@@ -484,7 +498,14 @@ function FillVendorDetailsInfoPage() {
                     </td>
                   </tr>
 
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        localStorage.getItem("user_type") === "admin"
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Fully Refended </td>
                     <td>
                       <div>
@@ -501,7 +522,14 @@ function FillVendorDetailsInfoPage() {
                       </div>
                     </td>
                   </tr>
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        localStorage.getItem("user_type") === "admin"
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Commission After Discount </td>
                     <td>
                       <div>
