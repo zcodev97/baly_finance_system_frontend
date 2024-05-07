@@ -189,8 +189,9 @@ function NavBar() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <div>
-                      <i class="fi fi-ss-circle"></i> {" " + "Vendors"}
+                    <div style={{ display: "flex" }}>
+                      <i class="fi fi-ss-circle"></i>{" "}
+                      <div style={{ marginLeft: "10px" }}>Vendors</div>
                     </div>
                     <div
                       style={{

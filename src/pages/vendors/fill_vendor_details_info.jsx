@@ -337,7 +337,9 @@ function FillVendorDetailsInfoPage() {
                   navigate(-1);
                 }}
               >
-                <b>Back To Vendors</b>
+                <b>
+                  <i class="fi fi-rr-arrow-small-left">back</i>
+                </b>
               </div>
             </div>
             <div className="container">
@@ -419,7 +421,8 @@ function FillVendorDetailsInfoPage() {
                     <td>
                       <Select
                         isDisabled={
-                          localStorage.getItem("is_superuser") === "true"
+                          localStorage.getItem("user_type") === "ams" ||
+                          localStorage.getItem("user_type") === "admin"
                             ? false
                             : true
                         }
@@ -579,79 +582,81 @@ function FillVendorDetailsInfoPage() {
                       </table>
                     </td>
                   </tr>
+                  <tr>
+                    <td colSpan={2} className="text-center">
+                      <button
+                        className="btn btn-success  mt-2 mb-2"
+                        onClick={() => {
+                          swal({
+                            text: `Are You Sure to Update ${location.state.arName} Vendor`,
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          }).then((willDelete) => {
+                            if (willDelete) {
+                              if (selectedPaymentMethod.length === 0) {
+                                swal("Error!", {
+                                  text: "Please Fill Payment Method",
+                                  icon: "warning",
+                                  // buttons: true,
+                                  dangerMode: true,
+                                });
+                                return;
+                              }
+
+                              if (selectedPaymentCycle.length === 0) {
+                                swal("Error!", {
+                                  text: "Please Fill Payment Cycle",
+                                  icon: "warning",
+                                  // buttons: true,
+                                  dangerMode: true,
+                                });
+                                return;
+                              }
+
+                              if (selectedAccountManager.length === 0) {
+                                swal("Error!", {
+                                  text: "Please Fill Account Manager",
+                                  icon: "warning",
+                                  // buttons: true,
+                                  dangerMode: true,
+                                });
+                                return;
+                              }
+
+                              if (number.length === 0) {
+                                swal("Error!", {
+                                  text: "Please Fill Payment Method Number",
+                                  icon: "warning",
+                                  // buttons: true,
+                                  dangerMode: true,
+                                });
+                                return;
+                              }
+
+                              if (receiverName.length === 0) {
+                                swal("Error!", {
+                                  text: "Please Fill Payment Receiver Name",
+                                  icon: "warning",
+                                  // buttons: true,
+                                  dangerMode: true,
+                                });
+                                return;
+                              }
+
+                              updateVendorInfo();
+                            } else {
+                              swal("You Cancelled the Operation!");
+                            }
+                          });
+                        }}
+                      >
+                        <b> Update</b>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-            </div>
-            <div>
-              <button
-                className="btn btn-success  mt-2 mb-2"
-                onClick={() => {
-                  swal({
-                    text: `Are You Sure to Update ${location.state.arName} Vendor`,
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                  }).then((willDelete) => {
-                    if (willDelete) {
-                      if (selectedPaymentMethod.length === 0) {
-                        swal("Error!", {
-                          text: "Please Fill Payment Method",
-                          icon: "warning",
-                          // buttons: true,
-                          dangerMode: true,
-                        });
-                        return;
-                      }
-
-                      if (selectedPaymentCycle.length === 0) {
-                        swal("Error!", {
-                          text: "Please Fill Payment Cycle",
-                          icon: "warning",
-                          // buttons: true,
-                          dangerMode: true,
-                        });
-                        return;
-                      }
-
-                      if (selectedAccountManager.length === 0) {
-                        swal("Error!", {
-                          text: "Please Fill Account Manager",
-                          icon: "warning",
-                          // buttons: true,
-                          dangerMode: true,
-                        });
-                        return;
-                      }
-
-                      if (number.length === 0) {
-                        swal("Error!", {
-                          text: "Please Fill Payment Method Number",
-                          icon: "warning",
-                          // buttons: true,
-                          dangerMode: true,
-                        });
-                        return;
-                      }
-
-                      if (receiverName.length === 0) {
-                        swal("Error!", {
-                          text: "Please Fill Payment Receiver Name",
-                          icon: "warning",
-                          // buttons: true,
-                          dangerMode: true,
-                        });
-                        return;
-                      }
-
-                      updateVendorInfo();
-                    } else {
-                      swal("You Cancelled the Operation!");
-                    }
-                  });
-                }}
-              >
-                <b> Update</b>
-              </button>
             </div>
           </div>
         </div>

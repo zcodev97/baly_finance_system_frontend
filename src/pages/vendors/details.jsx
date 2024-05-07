@@ -434,7 +434,9 @@ function VendorDetailsPage() {
                   navigate(-1);
                 }}
               >
-                <b>Back To Vendors</b>
+                <b>
+                  <i class="fi fi-rr-arrow-small-left">back</i>
+                </b>
               </div>
             </div>
             <div className="container">
@@ -677,29 +679,31 @@ function VendorDetailsPage() {
                       </table>
                     </td>
                   </tr>
+                  <tr>
+                    <td className="text-center" colSpan={2}>
+                      <button
+                        className="btn btn-success  mt-2 mb-2"
+                        onClick={() => {
+                          swal({
+                            text: `Are You Sure to Update ${location.state.vendor_id.arName} Vendor`,
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          }).then((willDelete) => {
+                            if (willDelete) {
+                              updateVendorInfo();
+                            } else {
+                              swal("You Cancelled the Operation!");
+                            }
+                          });
+                        }}
+                      >
+                        <b> Update</b>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-            </div>
-            <div>
-              <button
-                className="btn btn-success  mt-2 mb-2"
-                onClick={() => {
-                  swal({
-                    text: `Are You Sure to Update ${location.state.vendor_id.arName} Vendor`,
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                  }).then((willDelete) => {
-                    if (willDelete) {
-                      updateVendorInfo();
-                    } else {
-                      swal("You Cancelled the Operation!");
-                    }
-                  });
-                }}
-              >
-                <b> Update</b>
-              </button>
             </div>
           </div>
 
