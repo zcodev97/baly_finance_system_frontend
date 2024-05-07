@@ -259,7 +259,7 @@ function VendorDetailsPage() {
         .then(async (response) => {
           if (Object.values(response).length > 0) {
             await SaveDataToLogsTableAndSendEmail(emails);
-            navigate("/vendor_details", { replace: true, state: response });
+            navigate("/vendors", { replace: true });
             loadVendorUpdatesLogs();
           } else {
             swal("Failed To Save Data to DB !", {
