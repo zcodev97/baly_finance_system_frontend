@@ -308,13 +308,12 @@ function VendorDetailsPage() {
         old_owner_phone: "string",
         new_owner_phone: "string",
 
-        old_fully_refended:
-          location.state.fully_refunded === "yes" ? "true" : "false",
+        old_fully_refended: location.state.fully_refunded.toString(),
         new_fully_refended: fully_refunded.toString(),
-        old_penalized: location.state.penalized === "yes" ? "true" : "false",
+        old_penalized: location.state.penalized.toString(),
         new_panelized: penalized.toString(),
         old_commission_after_discount:
-          location.state.commission_after_discount === "yes" ? "true" : "false",
+          location.state.commission_after_discount.toString(),
         new_commission_after_discount: commission_after_discount.toString(),
         old_emails:
           Object.values(location.state.owner_email_json)?.length > 0

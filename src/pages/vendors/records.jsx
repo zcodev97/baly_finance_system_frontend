@@ -87,7 +87,7 @@ function VendorsPage() {
   async function loadVendorsDropDownMenu() {
     setLoading(true);
 
-    fetch(SYSTEM_URL + "api/matched-vendors/", {
+    fetch(SYSTEM_URL + "vendors_id_name_dropdown/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -101,8 +101,8 @@ function VendorsPage() {
         }
         response.forEach((i) => {
           vendorTempDropDownMenu.push({
-            label: i.arName,
-            value: i.id,
+            label: i.vendor_id.arName,
+            value: i.vendor_id.id,
           });
         });
         setVendorsDropDownMenu(vendorTempDropDownMenu);
