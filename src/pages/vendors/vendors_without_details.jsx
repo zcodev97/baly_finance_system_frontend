@@ -137,10 +137,11 @@ function VendorsWithoutDetailsPage() {
           className="container-fluid"
           style={{ margin: "0px", padding: "0px" }}
         >
-          <div className="container-fluid">
-            <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-              {data.length} Vendors Needs Action
-            </p>
+          <p style={{ fontSize: "16px", fontWeight: "bold" }}>
+            {data.length} Vendors Needs Action
+          </p>
+          {/* <div className="container-fluid">
+           
 
             <button
               className="btn btn-primary m-1"
@@ -169,7 +170,7 @@ function VendorsWithoutDetailsPage() {
             >
               Last &raquo;
             </button>
-          </div>
+          </div> */}
 
           <div
             className="container-fluid text-center"

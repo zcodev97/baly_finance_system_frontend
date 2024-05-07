@@ -56,7 +56,8 @@ function VendorsPage() {
 
   async function loadData(page = 1) {
     setLoading(true);
-    await fetch(SYSTEM_URL + `get_vendors_details_info/?page=${page}`, {
+    let requestUrl = `get_vendors_details_info/?page=${page}`;
+    await fetch(SYSTEM_URL + requestUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -197,7 +198,16 @@ function VendorsPage() {
             <p style={{ fontSize: "18px", fontWeight: "bold" }}>
               {data.count} Vendors
             </p>
-            <div className="container-fluid text-end">
+            <div
+              className="container-fluid text-end"
+              style={{
+                display:
+                  localStorage.getItem("user_type") === "ams" ||
+                  localStorage.getItem("user_type") === "admin"
+                    ? "inline-block"
+                    : "none",
+              }}
+            >
               <button
                 className="btn btn-light text-danger"
                 onClick={() => {
@@ -208,7 +218,11 @@ function VendorsPage() {
               </button>
             </div>
             <div className="container-fluid mt-4 mb-4 text-start">
-              <div style={{ width: "300px" }}>
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
                 Search By Vendor
                 <Select
                   defaultValue={selectedVendor}
@@ -250,7 +264,7 @@ function VendorsPage() {
               Last &raquo;
             </button>
           </div>
-          <div className="container mt-2 mb-2 text-center d-flex">
+          {/* <div className="container mt-2 mb-2 text-center d-flex">
             <form onSubmit={handleSubmit}>
               <input
                 type="file"
@@ -265,7 +279,7 @@ function VendorsPage() {
             >
               Upload
             </button>
-          </div>
+          </div> */}
 
           <div
             className="container-fluid text-center"

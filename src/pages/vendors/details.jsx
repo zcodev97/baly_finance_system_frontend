@@ -516,7 +516,8 @@ function VendorDetailsPage() {
                     <td>
                       <Select
                         isDisabled={
-                          localStorage.getItem("is_superuser") === "true"
+                          localStorage.getItem("user_type") === "ams" ||
+                          localStorage.getItem("user_type") === "admin"
                             ? false
                             : true
                         }

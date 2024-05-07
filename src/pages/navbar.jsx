@@ -101,14 +101,14 @@ function NavBar() {
           <div className="list-group list-group-flush mx-3 mt-1">
             <ul
               className="navbar-nav"
-              style={{ color: "#EFF0F0", fontWeight: "bold" }}
+              style={{ color: "#EFF0F0", fontWeight: "bold", fontSize: "14px" }}
             >
               <li
                 className="nav-item rounded m-1"
                 style={{ marginBottom: "20px" }}
               >
                 <Link
-                  onClick={(e) => handleLinkClick(e, "home")}
+                  // onClick={(e) => handleLinkClick(e, "home")}
                   className="nav-link"
                   to="/vendors"
                 >
@@ -158,7 +158,6 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -184,7 +183,6 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -194,7 +192,17 @@ function NavBar() {
                     <div>
                       <i class="fi fi-ss-circle"></i> {" " + "Vendors"}
                     </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                    <div
+                      style={{
+                        marginLeft: "10px",
+                        fontWeight: "normal",
+                        display:
+                          localStorage.getItem("user_type") === "ams" ||
+                          localStorage.getItem("user_type") === "admin"
+                            ? "inline"
+                            : "none",
+                      }}
+                    >
                       {vendorsWIthoutInfo.length}
                     </div>
                   </div>
@@ -210,7 +218,7 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "16px",
+                    
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -225,7 +233,15 @@ function NavBar() {
                   </div>
                 </NavLink>
               </li> */}
-              <li className="nav-item rounded m-1">
+              <li
+                className="nav-item rounded m-1"
+                style={{
+                  display:
+                    localStorage.getItem("user_type") === "admin"
+                      ? "inline"
+                      : "none",
+                }}
+              >
                 <NavLink
                   style={{ textDecoration: "none" }}
                   className={({ isActive }) =>
@@ -235,7 +251,6 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -250,7 +265,15 @@ function NavBar() {
                   </div>
                 </NavLink>
               </li>
-              <li className="nav-item rounded m-1">
+              <li
+                className="nav-item rounded m-1"
+                style={{
+                  display:
+                    localStorage.getItem("user_type") === "admin"
+                      ? "inline"
+                      : "none",
+                }}
+              >
                 <NavLink
                   style={{ textDecoration: "none" }}
                   className={({ isActive }) =>
@@ -260,7 +283,6 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
@@ -275,7 +297,15 @@ function NavBar() {
                   </div>
                 </NavLink>
               </li>
-              <li className="nav-item rounded m-1">
+              <li
+                className="nav-item rounded m-1"
+                style={{
+                  display:
+                    localStorage.getItem("user_type") === "admin"
+                      ? "inline"
+                      : "none",
+                }}
+              >
                 <NavLink
                   style={{ textDecoration: "none" }}
                   className={({ isActive }) =>
@@ -285,7 +315,6 @@ function NavBar() {
                 >
                   <div
                     style={{
-                      fontSize: "16px",
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
