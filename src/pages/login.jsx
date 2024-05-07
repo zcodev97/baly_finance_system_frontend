@@ -109,78 +109,84 @@ function Login() {
       {loading ? (
         <Loading />
       ) : (
-        <div
-          className="container-fluid"
-          id="loginPage"
-          style={{
-            width: window.innerWidth,
-            height: window.innerHeight,
-            marginLeft: "-12px",
-          }}
-        >
-          <form
-            style={{
-              minHeight: window.innerHeight,
-              display: "grid",
-              alignContent: "space-evenly",
-              justifyContent: "start",
-              justifyContent: "start",
-            }}
-          >
+        <div className="container-fluid " id="loginPage" style={{}}>
+          <form>
             <div
-              className="container-fluid p-4  text-center text-dark"
+              className="container  p-4  text-center text-dark "
               style={{
                 borderRadius: "50px",
-                height: "500px",
-                width: window.innerWidth / 1.2,
+
+                marginLeft: "150px",
+                marginTop: "150px",
+                width: window.innerWidth / 2,
               }}
             >
               <div className="container text-primary  pt-4 pb-4 mb-4 rounded-circle">
-                <h2>
-                  <b> Baly Payment System </b>
-                </h2>
+                <p style={{ fontSize: "40px" }}>
+                  <b> Baly Management System </b>
+                </p>
               </div>
-              <div className="row d-flex justify-content-center align-items-center p-4 m-1">
+              <div className="row border rounded d-flex justify-content-center align-items-center p-4 m-1">
                 <div className="col-md-6 m-1">
-                  <div className="container-fluid">
+                  <div
+                    className="container-fluid p-2"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <input
                       type="text"
                       className="form-control text-center"
-                      style={{ backgroundColor: "#e6e6e6" }}
+                      // style={{ backgroundColor: "#e6e6e6" }}
                       id="email"
                       placeholder="اسم المستخدم"
                       name="email"
                       onChange={handleUsername}
                     />
+                    <i
+                      class="fi fi-rr-circle-user"
+                      style={{ fontSize: "30px" }}
+                    ></i>
                   </div>
                 </div>
                 <div className="col-md-6 m-1">
-                  <div className="container-fluid">
+                  <div
+                    className="container-fluid"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
                     <input
                       type="password"
                       className="form-control text-center"
-                      style={{ backgroundColor: "#e6e6e6" }}
                       id="pwd"
                       placeholder="كلمة السر"
                       name="pswd"
                       onChange={handlePassword}
                     />
+                    <i
+                      class="fi fi-rr-circle-star"
+                      style={{ fontSize: "30px" }}
+                    ></i>
                   </div>
+                  <button
+                    id="loginButton"
+                    className="btn btn-primary mt-2"
+                    onClick={async () => {
+                      await checkIfUsernameAndPasswordIsCorrect();
+                    }}
+                    onKeyDown={async () => {
+                      await checkIfUsernameAndPasswordIsCorrect();
+                    }}
+                  >
+                    <b> دخول</b>
+                  </button>
                 </div>
               </div>
-
-              <button
-                id="loginButton"
-                className="btn btn-primary "
-                onClick={async () => {
-                  await checkIfUsernameAndPasswordIsCorrect();
-                }}
-                onKeyDown={async () => {
-                  await checkIfUsernameAndPasswordIsCorrect();
-                }}
-              >
-                <b> دخول</b>
-              </button>
             </div>
           </form>
         </div>
