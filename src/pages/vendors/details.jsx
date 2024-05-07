@@ -22,14 +22,12 @@ function VendorDetailsPage() {
   const [oldPaymentMethod, setOldPaymentMethod] = useState("");
   const [oldAccountManager, setOldAccountManager] = useState("");
 
-  const [penalized, setPenalized] = useState(
-    location.state.penalized === "no" ? false : true
-  );
+  const [penalized, setPenalized] = useState(location.state.penalized);
   const [fully_refunded, set_fully_refunded] = useState(
-    location.state.fully_refunded === "no" ? false : true
+    location.state.fully_refunded
   );
   const [commission_after_discount, setcommission_after_discount] = useState(
-    location.state.commission_after_discount === "no" ? false : true
+    location.state.commission_after_discount
   );
 
   const setPenalizedCheckBoxButton = (e) => {
