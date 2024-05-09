@@ -118,6 +118,41 @@ function VendorsPage() {
       });
   }
 
+  const [selectAccoutnManager, setSelectedAccountManager] = useState({});
+  const [accountManagersDropDownMenu, setAccountManagersDropDownMenu] =
+    useState([]);
+  let accountManagersTempDropDownMenu = [];
+  async function loadAccountManagersDropDownMenu() {
+    setLoading(true);
+
+    fetch(SYSTEM_URL + "account_managers/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+        response.forEach((i) => {
+          accountManagersTempDropDownMenu.push({
+            label: i.username,
+            value: i.id,
+          });
+        });
+        setAccountManagersDropDownMenu(accountManagersTempDropDownMenu);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   const [selectedVendor, setSelectedVendor] = useState({});
   const [vendorsDropDownMenu, setVendorsDropDownMenu] = useState([]);
   let vendorTempDropDownMenu = [];
@@ -158,10 +193,10 @@ function VendorsPage() {
     fetch(
       SYSTEM_URL +
         "vendor/?" +
-        `vendor_id=${selectedVendor.value}&pay_period=${
-          selectedPaymentCycle.label
-        }&pay_type=${
+        `pay_period=${selectedPaymentCycle.label}&pay_type=${
           selectePaymentMethod.label
+        }&account_manager=${
+          selectAccoutnManager.label
         }&fully_refended=${fully_refunded.toString()}&penalized=${penalized.toString()}&commision_after_discount=${commission_after_discount.toString()}`,
       {
         method: "GET",
@@ -177,7 +212,33 @@ function VendorsPage() {
           navigate("/login", { replace: true });
         }
         console.log(response);
-        // navigate("/vendor_details", { state: response.results[0] });
+        navigate("/filtered_vendors", { state: response });
+      })
+      .catch((e) => {
+        alert(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  async function getSingleVendor(vendor_id) {
+    setLoading(true);
+
+    fetch(SYSTEM_URL + "vendor/?" + `vendor_id=${vendor_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+
+        navigate("/vendor_details", { state: response.results[0] });
       })
       .catch((e) => {
         alert(e);
@@ -214,6 +275,7 @@ function VendorsPage() {
   useEffect(() => {
     loadData();
     loadVendorsDropDownMenu();
+    loadAccountManagersDropDownMenu();
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     loadVendorsWithoutDetails();
@@ -278,9 +340,24 @@ function VendorsPage() {
                   options={vendorsDropDownMenu}
                   onChange={(opt) => {
                     setSelectedVendor(opt);
-                    // getFilteredVendors(opt.value);
+                    getSingleVendor(opt.value);
                   }}
                   value={selectedVendor}
+                />
+              </div>
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                Account Manager
+                <Select
+                  defaultValue={selectAccoutnManager}
+                  options={accountManagersDropDownMenu}
+                  onChange={(opt) => {
+                    setSelectedAccountManager(opt);
+                  }}
+                  value={selectAccoutnManager}
                 />
               </div>
 

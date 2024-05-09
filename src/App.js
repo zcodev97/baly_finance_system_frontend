@@ -12,6 +12,7 @@ import VendorDetailsPage from "./pages/vendors/details";
 import AccountManagersLogsPage from "./pages/vendors/account_managers_logs.jsx";
 import VendorsWithoutDetailsPage from "./pages/vendors/vendors_without_details.jsx";
 import FillVendorDetailsInfoPage from "./pages/vendors/fill_vendor_details_info.jsx";
+import FilteredVendorsPage from "./pages/vendors/filtered_vendors.jsx";
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
 
               <Route path="/login" element={<LoginPage />} />
               <Route path="/vendors" element={<VendorsPage />} />
+              <Route
+                path="/filtered_vendors"
+                element={<FilteredVendorsPage />}
+              />
               <Route
                 path="/vendors_without_details"
                 element={<VendorsWithoutDetailsPage />}
