@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SYSTEM_URL, formatDate, randomInt } from "../../global";
+import { SYSTEM_URL, formatDate, isFirstWeek, randomInt } from "../../global";
 import NavBar from "../navbar";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -361,7 +361,7 @@ function VendorDetailsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
-  const itemsPerPage = 15;
+  const itemsPerPage = 5;
   async function loadVendorUpdatesLogs(page = 1) {
     setLoading(true);
     await fetch(
@@ -500,6 +500,7 @@ function VendorDetailsPage() {
                     <td>Payment Cycle</td>
                     <td>
                       <Select
+                        isDisabled={!isFirstWeek()}
                         defaultValue={selectedPaymentCycle}
                         options={paymentCycleDropDown}
                         onChange={(opt) => {

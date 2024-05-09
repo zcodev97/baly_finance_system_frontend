@@ -13,6 +13,18 @@ function formatDate(date = new Date()) {
   return `${year}-${month}-${day} ${hours12}:${minutes} ${ampm}`;
 }
 
+function isFirstWeek() {
+  const today = new Date(); // Get the current date
+  const dayOfMonth = today.getDate(); // Get the current day of the month
+
+  // Check if today's date is between 1 and 7
+  if (dayOfMonth >= 1 && dayOfMonth <= 7) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const randomInt = (min, max) =>
   max === undefined
     ? Math.floor(Math.random() * min)
@@ -22,4 +34,4 @@ const SYSTEM_URL = "http://38.180.105.203:8010/";
 // const SYSTEM_URL = "http://localhost:8000/";
 // const SYSTEM_URL = "http://18.158.82.59:8010/";
 
-export { formatDate, SYSTEM_URL, randomInt };
+export { formatDate, SYSTEM_URL, randomInt, isFirstWeek };
