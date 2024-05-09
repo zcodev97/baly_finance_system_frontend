@@ -74,7 +74,8 @@ function VendorsPage() {
         setPaginatedData(data.results);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       })
       .finally(() => {
         setLoading(false);
@@ -108,7 +109,7 @@ function VendorsPage() {
         setVendorsDropDownMenu(vendorTempDropDownMenu);
       })
       .catch((e) => {
-        alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -159,7 +160,8 @@ function VendorsPage() {
         setVendorsWithoutInfo(data);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       });
   }
 

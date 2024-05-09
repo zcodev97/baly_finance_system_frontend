@@ -49,7 +49,8 @@ function Login() {
         checkUserLoggedIn = true;
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       })
       .finally(() => {
         setLoading(false);

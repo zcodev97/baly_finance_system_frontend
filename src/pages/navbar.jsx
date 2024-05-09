@@ -33,7 +33,8 @@ function NavBar() {
         setData(data);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       });
   }
 
@@ -56,7 +57,8 @@ function NavBar() {
         setVendorsWithoutInfo(data);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       });
   }
   let navLinkClassName = "nav-link";
