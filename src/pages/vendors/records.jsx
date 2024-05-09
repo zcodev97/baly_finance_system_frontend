@@ -347,6 +347,11 @@ function VendorsPage() {
               <div
                 style={{
                   width: "300px",
+                  display:
+                    localStorage.getItem("user_type") === "ams" ||
+                    localStorage.getItem("user_type") === "admin"
+                      ? "inline-block"
+                      : "none",
                 }}
               >
                 Account Manager
