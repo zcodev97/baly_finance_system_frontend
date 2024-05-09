@@ -14,6 +14,7 @@ function VendorDetailsPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  console.log(location.state);
   const [vendorName, setVendorName] = useState("");
   const [number, setNumber] = useState("");
   const [receiverName, setPaymentReceiverName] = useState("");

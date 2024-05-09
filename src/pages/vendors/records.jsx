@@ -237,8 +237,7 @@ function VendorsPage() {
         if (response.code === "token_not_valid") {
           navigate("/login", { replace: true });
         }
-
-        navigate("/vendor_details", { state: response.results[0] });
+        navigate("/vendor_details", { state: response[0] });
       })
       .catch((e) => {
         alert(e);
