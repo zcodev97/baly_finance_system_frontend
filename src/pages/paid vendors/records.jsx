@@ -24,7 +24,7 @@ const PaidVendorsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
-  const itemsPerPage = 15;
+  const itemsPerPage = 5;
 
   function loadPayments(page = 1) {
     setLoading(true);

@@ -133,22 +133,56 @@ function NavBar() {
               </li>
               <hr />
               <li className="nav-item rounded m-1">
-                <Link
-                  // onClick={(e) => handleLinkClick(e, "profile")}
-                  className="nav-link"
-                  to="/vendors"
-                >
+                <NavLink className="nav-link" to="/vendors">
                   <div>
                     <div></div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       <li className="nav-item text-start">
-                        <b>{localStorage.getItem("username")}</b>
-                        <p>{localStorage.getItem("user_type")}</p>
+                        <div>{localStorage.getItem("username")}</div>
+                        {/* <div>{localStorage.getItem("user_type")}</div> */}
                       </li>
                     </div>
                   </div>
-                </Link>
+                </NavLink>
               </li>
+              <li className="nav-item rounded m-1">
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/vendors_without_details"
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
+                      <li className="nav-item text-start">
+                        <i class="fi fi-rr-envelope-dot"></i>
+                      </li>
+                    </div>
+                    <div
+                      style={{
+                        marginLeft: "10px",
+                        fontWeight: "bold",
+                        color: "white",
+                        display:
+                          localStorage.getItem("user_type") === "ams" ||
+                          localStorage.getItem("user_type") === "admin"
+                            ? "inline"
+                            : "none",
+                      }}
+                    >
+                      {vendorsWIthoutInfo.length}
+                    </div>
+                  </div>
+                </NavLink>
+              </li>
+
               <li className="nav-item rounded m-1">
                 <NavLink
                   style={{ textDecoration: "none" }}

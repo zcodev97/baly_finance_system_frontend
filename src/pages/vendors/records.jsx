@@ -14,11 +14,16 @@ import Select from "react-select";
 function VendorsPage() {
   const navigate = useNavigate();
 
+  // check box
+  const [penalized, setPenalized] = useState(false);
+  const [fully_refunded, set_fully_refunded] = useState(false);
+  const [commission_after_discount, setcommission_after_discount] =
+    useState(false);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
-  const itemsPerPage = 15;
+  const itemsPerPage = 5;
 
   const [totalDinar, setTotalDinar] = useState(0);
   const [totalDollar, setTotalDollar] = useState(0);
@@ -30,7 +35,7 @@ function VendorsPage() {
   };
 
   // drop down for payment cycle
-  const [selectedPaymentCycle, setSelectedPaymentCycle] = useState("");
+  const [selectedPaymentCycle, setSelectedPaymentCycle] = useState({});
   const paymentCyclesDropDownMenu = [
     { value: "chocolate", label: "2 Weeks" },
     { value: "strawberry", label: "Weekly" },
@@ -38,7 +43,7 @@ function VendorsPage() {
   ];
 
   // drop down for payment method
-  const [selectePaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [selectePaymentMethod, setSelectedPaymentMethod] = useState({});
   const paymentMethodDropDownMenu = [
     { value: "chocolate", label: "Cash" },
     { value: "strawberry", label: "Qi Card" },
@@ -242,13 +247,12 @@ function VendorsPage() {
                   width: "300px",
                 }}
               >
-                Search By Vendor
+                Vendor
                 <Select
                   defaultValue={selectedVendor}
                   options={vendorsDropDownMenu}
                   onChange={(opt) => {
                     setSelectedVendor(opt);
-                    // get selected vendor info and navigate to vendor details page
                     getSingleVendor(opt.value);
                   }}
                   value={selectedVendor}
@@ -260,7 +264,7 @@ function VendorsPage() {
                   width: "300px",
                 }}
               >
-                Search By Payment Cycle
+                Payment Cycle
                 <Select
                   defaultValue={selectedPaymentCycle}
                   options={paymentCyclesDropDownMenu}
@@ -275,7 +279,7 @@ function VendorsPage() {
                   width: "300px",
                 }}
               >
-                Search By Payment Method
+                Payment Method
                 <Select
                   defaultValue={selectePaymentMethod}
                   options={paymentMethodDropDownMenu}
@@ -286,7 +290,14 @@ function VendorsPage() {
                 />
               </div>
             </div>
-            <div className="container-fluid mt-4 mb-4 text-start">
+            <div
+              className="container-fluid mt-4 mb-4 text-start"
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
               <div
                 style={{
                   width: "300px",
@@ -335,34 +346,17 @@ function VendorsPage() {
                   // onChange={setFullyRefendedCheckBoxButton}
                 />
               </div>
+
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                <button className="btn btn-primary m-1" onClick={() => {}}>
+                  Search
+                </button>
+              </div>
             </div>
-            <button
-              className="btn btn-primary m-1"
-              onClick={() => changePage(1)}
-            >
-              &laquo; First
-            </button>
-            <button
-              className="btn btn-primary m-1"
-              onClick={() => changePage(currentPage - 1)}
-            >
-              &lsaquo; Prev
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              className="btn btn-primary m-1"
-              onClick={() => changePage(currentPage + 1)}
-            >
-              Next &rsaquo;
-            </button>
-            <button
-              className="btn btn-primary m-1"
-              onClick={() => changePage(totalPages)}
-            >
-              Last &raquo;
-            </button>
           </div>
           {/* <div className="container mt-2 mb-2 text-center d-flex">
             <form onSubmit={handleSubmit}>
@@ -442,6 +436,33 @@ function VendorsPage() {
                 </tbody>
               </table>
             </div>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(1)}
+            >
+              &laquo; First
+            </button>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(currentPage - 1)}
+            >
+              &lsaquo; Prev
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(currentPage + 1)}
+            >
+              Next &rsaquo;
+            </button>
+            <button
+              className="btn btn-primary m-1"
+              onClick={() => changePage(totalPages)}
+            >
+              Last &raquo;
+            </button>
           </div>
         </div>
       )}
