@@ -29,6 +29,22 @@ function VendorsPage() {
     setFile(event.target.files[0]);
   };
 
+  // drop down for payment cycle
+  const [selectedPaymentCycle, setSelectedPaymentCycle] = useState("");
+  const paymentCyclesDropDownMenu = [
+    { value: "chocolate", label: "2 Weeks" },
+    { value: "strawberry", label: "Weekly" },
+    { value: "vanilla", label: "Monthly" },
+  ];
+
+  // drop down for payment method
+  const [selectePaymentMethod, setSelectedPaymentMethod] = useState("");
+  const paymentMethodDropDownMenu = [
+    { value: "chocolate", label: "Cash" },
+    { value: "strawberry", label: "Qi Card" },
+    { value: "vanilla", label: "ZainCash" },
+  ];
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -166,13 +182,11 @@ function VendorsPage() {
   }
 
   useEffect(() => {
-    setLoading(true);
     loadData();
     loadVendorsDropDownMenu();
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     loadVendorsWithoutDetails();
-    setLoading(false);
   }, []);
 
   const totalPages = Math.ceil(data.count / itemsPerPage);
@@ -219,7 +233,10 @@ function VendorsPage() {
                 <b>⚠️ {vendorsWIthoutInfo.length} Vendors Without Details</b>
               </button>
             </div>
-            <div className="container-fluid mt-4 mb-4 text-start">
+            <div
+              className="container-fluid mt-4 mb-4 text-start"
+              style={{ display: "flex", justifyContent: "space-around" }}
+            >
               <div
                 style={{
                   width: "300px",
@@ -235,6 +252,87 @@ function VendorsPage() {
                     getSingleVendor(opt.value);
                   }}
                   value={selectedVendor}
+                />
+              </div>
+
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                Search By Payment Cycle
+                <Select
+                  defaultValue={selectedPaymentCycle}
+                  options={paymentCyclesDropDownMenu}
+                  onChange={(opt) => {
+                    setSelectedPaymentCycle(opt);
+                  }}
+                  value={selectedPaymentCycle}
+                />
+              </div>
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                Search By Payment Method
+                <Select
+                  defaultValue={selectePaymentMethod}
+                  options={paymentMethodDropDownMenu}
+                  onChange={(opt) => {
+                    setSelectedPaymentMethod(opt);
+                  }}
+                  value={selectePaymentMethod}
+                />
+              </div>
+            </div>
+            <div className="container-fluid mt-4 mb-4 text-start">
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                Fully Refended
+                <input
+                  style={{ marginLeft: "10px" }}
+                  // checked={fully_refunded}
+                  className="form-check-input"
+                  type="checkbox"
+                  name="fully_refended"
+                  id="fully_refended"
+                  // onChange={setFullyRefendedCheckBoxButton}
+                />
+              </div>
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                Penalized
+                <input
+                  style={{ marginLeft: "10px" }}
+                  // checked={fully_refunded}
+                  className="form-check-input"
+                  type="checkbox"
+                  name="fully_refended"
+                  id="fully_refended"
+                  // onChange={setFullyRefendedCheckBoxButton}
+                />
+              </div>
+              <div
+                style={{
+                  width: "300px",
+                }}
+              >
+                Commission after Discount
+                <input
+                  style={{ marginLeft: "10px" }}
+                  // checked={fully_refunded}
+                  className="form-check-input"
+                  type="checkbox"
+                  name="fully_refended"
+                  id="fully_refended"
+                  // onChange={setFullyRefendedCheckBoxButton}
                 />
               </div>
             </div>
