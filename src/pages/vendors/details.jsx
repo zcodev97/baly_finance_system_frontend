@@ -501,7 +501,13 @@ function VendorDetailsPage() {
                     <td>Payment Cycle</td>
                     <td>
                       <Select
-                        isDisabled={!isFirstWeek()}
+                        isDisabled={
+                          isFirstWeek()
+                            ? selectedPaymentCycle === "NA"
+                              ? false
+                              : true
+                            : false
+                        }
                         defaultValue={selectedPaymentCycle}
                         options={paymentCycleDropDown}
                         onChange={(opt) => {

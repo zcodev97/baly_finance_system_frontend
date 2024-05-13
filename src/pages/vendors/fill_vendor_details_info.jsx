@@ -15,30 +15,6 @@ function FillVendorDetailsInfoPage() {
   const [loading, setLoading] = useState(false);
 
   const [vendorName, setVendorName] = useState("");
-  const [number, setNumber] = useState("");
-  const [receiverName, setPaymentReceiverName] = useState("");
-  const [oldPaymentCycle, setOldPaymentCycle] = useState("");
-  const [oldPaymentMethod, setOldPaymentMethod] = useState("");
-  const [oldAccountManager, setOldAccountManager] = useState("");
-
-  const [penalized, setPenalized] = useState(false);
-  const [fully_refunded, set_fully_refunded] = useState(false);
-  const [commission_after_discount, setcommission_after_discount] =
-    useState(false);
-
-  const setPenalizedCheckBoxButton = (e) => {
-    const { name, checked } = e.target;
-    setPenalized(checked);
-  };
-
-  const setFullyRefendedCheckBoxButton = (e) => {
-    const { name, checked } = e.target;
-    set_fully_refunded(checked);
-  };
-  const setCommissionAfterDiscountCheckBoxButton = (e) => {
-    const { name, checked } = e.target;
-    setcommission_after_discount(checked);
-  };
 
   const [rows, setRows] = useState([]);
 
@@ -57,74 +33,6 @@ function FillVendorDetailsInfoPage() {
     newRows[index][key] = value;
     setRows(newRows);
   };
-
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-  const [paymentMethodDropDown, setpaymentMethodDropDown] = useState([]);
-  let dropdownMenupaymentmethodTemp = [];
-  async function loadPaymentsMethod() {
-    setLoading(true);
-
-    fetch(SYSTEM_URL + "payment_methods/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.code === "token_not_valid") {
-          navigate("/login", { replace: true });
-        }
-        response.results?.forEach((i) => {
-          dropdownMenupaymentmethodTemp.push({
-            label: i.title,
-            value: i.id,
-          });
-        });
-
-        setpaymentMethodDropDown(dropdownMenupaymentmethodTemp);
-      })
-      .catch((e) => {
-        alert(e);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
-
-  const [selectedPaymentCycle, setSelectedPaymentCycle] = useState("");
-  const [paymentCycleDropDown, setpaymentCycleDropDown] = useState([]);
-  let dropdownMenupaymentcyclesTemp = [];
-  async function loadPaymentsCycle() {
-    setLoading(true);
-
-    fetch(SYSTEM_URL + "payment_cycles/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        response.results?.forEach((i) => {
-          dropdownMenupaymentcyclesTemp.push({
-            label: i.title,
-            value: i.id,
-          });
-        });
-
-        setpaymentCycleDropDown(dropdownMenupaymentcyclesTemp);
-      })
-      .catch((e) => {
-        alert(e);
-        // console.log(e);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }
 
   const [selectedAccountManager, setSelecetedAccountManager] = useState("");
   const [accountManagersDropDown, setAccountManagersDropDown] = useState([]);
@@ -171,83 +79,77 @@ function FillVendorDetailsInfoPage() {
   }
 
   async function updateVendorInfo() {
-    let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+    // let emails = rows.filter((obj) => Object.keys(obj).length > 0);
 
-    let areValidEmails = emails.map((i) => ValidateEmail(i.title));
+    // let areValidEmails = emails.map((i) => ValidateEmail(i.title));
 
-    if (areValidEmails.find((i) => i === false) === false) {
-      swal("Error!", {
-        title: "Check Email Input!",
-        text: `Try to Correct Email address !`,
-        icon: "warning",
-        dangerMode: true,
-      });
-      setLoading(false);
+    // if (areValidEmails.find((i) => i === false) === false) {
+    //   swal("Error!", {
+    //     title: "Check Email Input!",
+    //     text: `Try to Correct Email address !`,
+    //     icon: "warning",
+    //     dangerMode: true,
+    //   });
+    //   setLoading(false);
 
-      return;
-    } else {
-      setLoading(true);
-      fetch(SYSTEM_URL + "add_vendor_details_info/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          vendor_id: location.state.id,
-          number: number,
-          pay_period: selectedPaymentCycle.value,
-          pay_type: selectedPaymentMethod.value,
-          account_manager: selectedAccountManager.value,
-          payment_receiver_name: receiverName,
-          owner_email_json: emails,
-          fully_refunded:
-            localStorage.getItem("user-type") === "admin"
-              ? fully_refunded
-              : "false",
-          penalized:
-            localStorage.getItem("user-type") === "admin" ? penalized : "false",
-          commission_after_discount:
-            localStorage.getItem("user-type") === "admin"
-              ? commission_after_discount
-              : "false",
-        }),
+    //   return;
+    // } else {
+
+    setLoading(true);
+    fetch(SYSTEM_URL + "add_vendor_details_info/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        vendor_id: location.state.id,
+        number: "NA",
+        pay_period: "3d83d103-84fc-42b0-a41b-b992d1e59402",
+        pay_type: "1cfca47d-4ba8-4329-826d-bc04c11a1088",
+        account_manager: selectedAccountManager.value,
+        payment_receiver_name: "NA",
+        owner_email_json: "no emails",
+        fully_refunded: "false",
+        penalized: "false",
+        commission_after_discount: "false",
+      }),
+    })
+      .then((response) => {
+        if (response.status === 201) {
+          return response.json();
+        } else {
+          return {};
+        }
       })
-        .then((response) => {
-          if (response.status === 201) {
-            return response.json();
-          } else {
-            return {};
-          }
-        })
-        .then(async (response) => {
-          if (Object.values(response).length > 0) {
-            swal("Data Saved !", {
-              text: `Data Saved and Email Sent For creating new Vendor`,
-              dangerMode: false,
-            });
-            await SaveDataToLogsTableAndSendEmail(emails);
-            navigate("/vendors", { replace: true });
-          } else {
-            swal("Failed To Save Data to DB !", {
-              text: `Data not saved and Email is not Sent`,
-              icon: "warning",
-              buttons: true,
-              dangerMode: true,
-            });
-          }
-        })
-        .catch((e) => {
-          alert(e);
-        });
-    }
+      .then(async (response) => {
+        if (Object.values(response).length > 0) {
+          swal("Data Saved !", {
+            text: `Data Saved and Email Sent For creating new Vendor`,
+            dangerMode: false,
+          });
+          await SaveDataToLogsTableAndSendEmail();
+          navigate("/vendors", { replace: true });
+        } else {
+          swal("Failed To Save Data to DB !", {
+            text: `Data not saved and Email is not Sent`,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          });
+        }
+      })
+      .catch((e) => {
+        alert(e);
+      });
+    // }
 
     setLoading(false);
   }
 
-  async function SaveDataToLogsTableAndSendEmail(emails) {
+  async function SaveDataToLogsTableAndSendEmail() {
     setLoading(true);
-    fetch(SYSTEM_URL + "create_vendor_update_log/", {
+    fetch(SYSTEM_URL + "create_new_vendor_update_log/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -257,28 +159,25 @@ function FillVendorDetailsInfoPage() {
         vendor_id: location.state.id,
         vendor_name: location.state.arName,
         old_payment_method: "no old_payment_method ",
-        new_payment_method: selectedPaymentMethod?.label,
+        new_payment_method: "NA",
         old_payment_cycle: "no old_payment_cycle",
-        new_payment_cycle: selectedPaymentCycle?.label,
+        new_payment_cycle: "NA",
         old_account_manager: "no old_account_manager",
         new_account_manager: selectedAccountManager?.label,
         old_number: "no old_number",
-        new_number: number?.length > 0 ? number : "0",
+        new_number: "NA",
         old_receiver_name: "no old receiver name",
-        new_receiver_name: receiverName,
-        old_owner_phone: "string",
-        new_owner_phone: "string",
+        new_receiver_name: "NA",
+        old_owner_phone: "NA",
+        new_owner_phone: "NA",
         old_fully_refended: "no old_fully_refended",
-        new_fully_refended: fully_refunded.toString(),
+        new_fully_refended: "false",
         old_penalized: "no old_penalized",
-        new_panelized: penalized.toString(),
+        new_panelized: "false",
         old_commission_after_discount: "no old_commission_after_discount",
-        new_commission_after_discount: commission_after_discount.toString(),
+        new_commission_after_discount: "false",
         old_emails: "no old_emails",
-        new_emails:
-          Object.values(emails)?.length > 0
-            ? emails?.map((i) => i.title)?.toString()
-            : "no emails",
+        new_emails: "NA",
         created_by: localStorage.getItem("user_id"),
       }),
     })
@@ -321,8 +220,8 @@ function FillVendorDetailsInfoPage() {
 
   useEffect(() => {
     setLoading(true);
-    loadPaymentsMethod();
-    loadPaymentsCycle();
+    // loadPaymentsMethod();
+    // loadPaymentsCycle();
     loadAccountManagers();
 
     setLoading(false);
@@ -395,7 +294,9 @@ function FillVendorDetailsInfoPage() {
                     </td>
                   </tr>
 
-                  <tr>
+                  {/* <tr
+                   
+                  >
                     <td>Payment Method</td>
                     <td>
                       <Select
@@ -421,7 +322,7 @@ function FillVendorDetailsInfoPage() {
                         value={selectedPaymentCycle}
                       />
                     </td>
-                  </tr>
+                  </tr> */}
 
                   <tr>
                     <td>Account Manager</td>
@@ -442,7 +343,7 @@ function FillVendorDetailsInfoPage() {
                       />
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>Payment Method Number</td>
                     <td>
                       <input
@@ -545,7 +446,7 @@ function FillVendorDetailsInfoPage() {
                         <div className="p-2"></div>
                       </div>
                     </td>
-                  </tr>
+                  </tr> */}
 
                   {/* <tr>
                     <table className="table">
@@ -565,7 +466,7 @@ function FillVendorDetailsInfoPage() {
                       </tbody>
                     </table>
                   </tr> */}
-                  <tr>
+                  {/* <tr>
                     <td colSpan={2}>
                       <table className="table text-center">
                         <tfoot>
@@ -609,7 +510,7 @@ function FillVendorDetailsInfoPage() {
                         </tbody>
                       </table>
                     </td>
-                  </tr>
+                  </tr> */}
                   <tr>
                     <td colSpan={2} className="text-center">
                       <button
@@ -622,49 +523,9 @@ function FillVendorDetailsInfoPage() {
                             dangerMode: true,
                           }).then((willDelete) => {
                             if (willDelete) {
-                              if (selectedPaymentMethod.length === 0) {
-                                swal("Error!", {
-                                  text: "Please Fill Payment Method",
-                                  icon: "warning",
-                                  // buttons: true,
-                                  dangerMode: true,
-                                });
-                                return;
-                              }
-
-                              if (selectedPaymentCycle.length === 0) {
-                                swal("Error!", {
-                                  text: "Please Fill Payment Cycle",
-                                  icon: "warning",
-                                  // buttons: true,
-                                  dangerMode: true,
-                                });
-                                return;
-                              }
-
                               if (selectedAccountManager.length === 0) {
                                 swal("Error!", {
                                   text: "Please Fill Account Manager",
-                                  icon: "warning",
-                                  // buttons: true,
-                                  dangerMode: true,
-                                });
-                                return;
-                              }
-
-                              if (number.length === 0) {
-                                swal("Error!", {
-                                  text: "Please Fill Payment Method Number",
-                                  icon: "warning",
-                                  // buttons: true,
-                                  dangerMode: true,
-                                });
-                                return;
-                              }
-
-                              if (receiverName.length === 0) {
-                                swal("Error!", {
-                                  text: "Please Fill Payment Receiver Name",
                                   icon: "warning",
                                   // buttons: true,
                                   dangerMode: true,
