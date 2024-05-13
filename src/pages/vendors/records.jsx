@@ -545,31 +545,31 @@ function VendorsPage() {
               </table>
             </div>
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-light text-primary m-1"
               onClick={() => changePage(1)}
             >
-              &laquo; First
+              <b>&laquo;</b>
             </button>
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-light text-primary m-1"
               onClick={() => changePage(currentPage - 1)}
             >
-              &lsaquo; Prev
+              <b>&lsaquo;</b>
             </button>
             <span>
               Page {currentPage} of {totalPages}
             </span>
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-light text-primary m-1"
               onClick={() => changePage(currentPage + 1)}
             >
-              Next &rsaquo;
+              <b>&rsaquo;</b>
             </button>
             <button
-              className="btn btn-primary m-1"
+              className="btn btn-light text-primary m-1"
               onClick={() => changePage(totalPages)}
             >
-              Last &raquo;
+              <b>&raquo;</b>
             </button>
           </div>
         </div>

@@ -121,10 +121,10 @@ function VendorsWithoutDetailsPage() {
       })
       .then(async (response) => {
         if (Object.values(response).length > 0) {
-          swal("Data Saved !", {
-            text: `Data Saved and Email Sent For creating new Vendor`,
-            dangerMode: false,
-          });
+          // swal("Data Saved !", {
+          //   text: `Data Saved and Email Sent For creating new Vendor`,
+          //   dangerMode: false,
+          // });
           await SaveDataToLogsTableAndSendEmail(
             vendor_id,
             vendor_name,
