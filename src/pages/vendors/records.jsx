@@ -15,10 +15,10 @@ function VendorsPage() {
   const navigate = useNavigate();
 
   // check box
-  const [penalized, setPenalized] = useState(false);
-  const [fully_refunded, set_fully_refunded] = useState(false);
+  const [penalized, setPenalized] = useState('undefined');
+  const [fully_refunded, set_fully_refunded] = useState('undefined');
   const [commission_after_discount, setcommission_after_discount] =
-    useState(false);
+    useState('undefined');
   const setPenalizedCheckBoxButton = (e) => {
     const { name, checked } = e.target;
     setPenalized(checked);
@@ -192,12 +192,10 @@ function VendorsPage() {
 
     fetch(
       SYSTEM_URL +
-        "vendor/?" +
-        `pay_period=${selectedPaymentCycle.label}&pay_type=${
-          selectePaymentMethod.label
-        }&account_manager=${
-          selectAccoutnManager.label
-        }&fully_refended=${fully_refunded.toString()}&penalized=${penalized.toString()}&commision_after_discount=${commission_after_discount.toString()}`,
+      "vendor/?" +
+      `pay_period=${selectedPaymentCycle.label}&pay_type=${selectePaymentMethod.label
+      }&account_manager=${selectAccoutnManager.label
+      }&fully_refended=${fully_refunded.toString()}&penalized=${penalized.toString()}&commision_after_discount=${commission_after_discount.toString()}`,
       {
         method: "GET",
         headers: {
@@ -310,7 +308,7 @@ function VendorsPage() {
               style={{
                 display:
                   localStorage.getItem("user_type") === "ams" ||
-                  localStorage.getItem("user_type") === "admin"
+                    localStorage.getItem("user_type") === "admin"
                     ? "inline-block"
                     : "none",
               }}
@@ -349,7 +347,7 @@ function VendorsPage() {
                   width: "300px",
                   display:
                     localStorage.getItem("user_type") === "ams" ||
-                    localStorage.getItem("user_type") === "admin"
+                      localStorage.getItem("user_type") === "admin"
                       ? "inline-block"
                       : "none",
                 }}
@@ -413,7 +411,7 @@ function VendorsPage() {
                 Fully Refended
                 <input
                   style={{ marginLeft: "10px" }}
-                  checked={fully_refunded}
+                  // checked={fully_refunded}
                   className="form-check-input"
                   type="checkbox"
                   name="fully_refended"
@@ -429,7 +427,7 @@ function VendorsPage() {
                 Penalized
                 <input
                   style={{ marginLeft: "10px" }}
-                  checked={penalized}
+                  // checked={penalized}
                   className="form-check-input"
                   type="checkbox"
                   name="Penalized"
@@ -445,7 +443,7 @@ function VendorsPage() {
                 Commission after Discount
                 <input
                   style={{ marginLeft: "10px" }}
-                  checked={commission_after_discount}
+                  // checked={commission_after_discount}
                   className="form-check-input"
                   type="checkbox"
                   name="Commission after Discount"
