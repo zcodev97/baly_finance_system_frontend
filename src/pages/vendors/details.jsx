@@ -367,7 +367,7 @@ function VendorDetailsPage() {
     setLoading(true);
     await fetch(
       SYSTEM_URL +
-        `vendor_single_update_logs/${location.state.vendor_id.id}?page=${page}`,
+      `vendor_single_update_logs/${location.state.vendor_id.id}?page=${page}`,
       {
         method: "GET",
         headers: {
@@ -506,7 +506,7 @@ function VendorDetailsPage() {
                             ? selectedPaymentCycle === "NA"
                               ? false
                               : true
-                            : false
+                            : true
                         }
                         defaultValue={selectedPaymentCycle}
                         options={paymentCycleDropDown}
@@ -524,7 +524,7 @@ function VendorDetailsPage() {
                       <Select
                         isDisabled={
                           localStorage.getItem("user_type") === "ams" ||
-                          localStorage.getItem("user_type") === "admin"
+                            localStorage.getItem("user_type") === "admin"
                             ? false
                             : true
                         }
