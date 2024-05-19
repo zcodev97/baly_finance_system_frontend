@@ -308,25 +308,7 @@ function VendorsPage() {
             <p style={{ fontSize: "18px", fontWeight: "bold" }}>
               {data.count} Vendors
             </p>
-            <div
-              className="container-fluid text-end"
-              style={{
-                display:
-                  localStorage.getItem("user_type") === "ams" ||
-                    localStorage.getItem("user_type") === "admin"
-                    ? "inline-block"
-                    : "none",
-              }}
-            >
-              <button
-                className="btn btn-light text-danger"
-                onClick={() => {
-                  navigate("/vendors_without_details");
-                }}
-              >
-                <b>⚠️ {vendorsWIthoutInfo.length} Vendors Without Details</b>
-              </button>
-            </div>
+
             <div
               className="container-fluid mt-4 mb-4 text-start"
               style={{ display: "flex", justifyContent: "space-around" }}

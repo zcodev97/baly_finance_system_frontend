@@ -145,43 +145,7 @@ function NavBar() {
                   </div>
                 </NavLink>
               </li>
-              <li className="nav-item rounded m-1">
-                <NavLink
-                  style={{ textDecoration: "none" }}
-                  className={({ isActive }) =>
-                    "nav-link" + (isActive ? "active-link" : "")
-                  }
-                  to="/vendors_without_details"
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      alignContent: "center",
-                    }}
-                  >
-                    <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
-                      <li className="nav-item text-start">
-                        <i class="fi fi-rr-envelope-dot"></i>
-                      </li>
-                    </div>
-                    <div
-                      style={{
-                        marginLeft: "10px",
-                        fontWeight: "bold",
-                        color: "white",
-                        display:
-                          localStorage.getItem("user_type") === "ams" ||
-                          localStorage.getItem("user_type") === "admin"
-                            ? "inline"
-                            : "none",
-                      }}
-                    >
-                      {vendorsWIthoutInfo.length}
-                    </div>
-                  </div>
-                </NavLink>
-              </li>
+
 
               <li className="nav-item rounded m-1">
                 <NavLink
@@ -235,15 +199,78 @@ function NavBar() {
                         fontWeight: "normal",
                         display:
                           localStorage.getItem("user_type") === "ams" ||
-                          localStorage.getItem("user_type") === "admin"
+                            localStorage.getItem("user_type") === "admin"
                             ? "inline"
                             : "none",
                       }}
                     >
-                      {vendorsWIthoutInfo.length}
+
                     </div>
                   </div>
                 </NavLink>
+              </li>
+              <li
+                className="nav-item rounded m-1"
+                style={{
+                  display:
+                    localStorage.getItem("user_type") === "ams" | localStorage.getItem("user_type") === "admin"
+                      ? "inline"
+                      : "none",
+                }}
+              >
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/vendors_without_account_managers"
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "bold" }}>
+                      Vendors Without Account Managers
+                    </div>
+
+                  </div>
+                </NavLink>
+
+              </li>
+              <li
+                className="nav-item rounded m-1"
+
+              >
+                <NavLink
+                  style={{ textDecoration: "none" }}
+                  className={({ isActive }) =>
+                    "nav-link" + (isActive ? "active-link" : "")
+                  }
+                  to="/vendors_without_details"
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <div>
+                      <i class="fi fi-ss-circle"></i>
+                    </div>
+                    <div style={{ marginLeft: "10px", fontWeight: "bold" }}>
+                      Vendors Without Details
+                    </div>
+
+                  </div>
+                </NavLink>
+
               </li>
               {/* <li className="nav-item rounded m-1">
                 <NavLink
@@ -301,7 +328,9 @@ function NavBar() {
                     </div>
                   </div>
                 </NavLink>
+
               </li>
+
               <li
                 className="nav-item rounded m-1"
                 style={{

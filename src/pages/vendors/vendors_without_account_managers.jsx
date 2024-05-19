@@ -13,7 +13,7 @@ import Select from "react-select";
 import swal from "sweetalert";
 import { useLocation } from "react-router-dom";
 
-function VendorsWithoutDetailsPage() {
+function VendorsWithoutAccountManagersPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,7 +25,7 @@ function VendorsWithoutDetailsPage() {
 
   async function loadData(page = 1) {
     setLoading(true);
-    await fetch(SYSTEM_URL + `get_vendors_without_details_info/?page=${page}`, {
+    await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function VendorsWithoutDetailsPage() {
         }
 
         setData(data);
-        setPaginatedData(data.results);
+        setPaginatedData(data);
       })
       .catch((error) => {
         alert(error);
@@ -49,8 +49,47 @@ function VendorsWithoutDetailsPage() {
       });
   }
 
+  const [selectedAccountManagers, setSelectedAccountManagers] = useState({});
 
+  const handleSelectChange = (vendorId, selectedOption) => {
+    setSelectedAccountManagers({
+      ...selectedAccountManagers,
+      [vendorId]: selectedOption,
+    });
+  };
 
+  const [selectedAccountManager, setSelecetedAccountManager] = useState("");
+  const [accountManagersDropDown, setAccountManagersDropDown] = useState([]);
+  let dropdownaccountManagersTemp = [];
+  async function loadAccountManagers() {
+    setLoading(true);
+
+    fetch(SYSTEM_URL + "account_managers/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        response?.forEach((i) => {
+          dropdownaccountManagersTemp.push({
+            label: i.username,
+            value: i.id,
+          });
+        });
+
+        setAccountManagersDropDown(dropdownaccountManagersTemp);
+      })
+      .catch((e) => {
+        alert(e);
+        // console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
 
   async function updateVendorInfo(vendor_id, vendor_name, selectedManager) {
     setLoading(true);
@@ -183,6 +222,7 @@ function VendorsWithoutDetailsPage() {
   useEffect(() => {
     setLoading(true);
     loadData();
+    loadAccountManagers();
 
     // loadVendorsDropDownMenu();
     const start = (currentPage - 1) * itemsPerPage;
@@ -213,7 +253,7 @@ function VendorsWithoutDetailsPage() {
           style={{ margin: "0px", padding: "0px" }}
         >
           <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-            {data.count} Vendors Needs Action
+            {data.length} Vendors Needs Account Manager
           </p>
           <div
             className="container-fluid text-center"
@@ -231,20 +271,59 @@ function VendorsWithoutDetailsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedData?.map((item) => (
+                  {paginatedData.map((item) => (
                     <tr className="align-middle" key={item.id}>
-                      <td>{item.vendor_id.id}</td>
-                      <td>{item.vendor_id.arName}</td>
-
+                      <td>{item.id}</td>
+                      <td>{item.arName}</td>
+                      <td>
+                        <Select
+                          id={`select-${item.id}`}
+                          isDisabled={
+                            localStorage.getItem("user_type") === "ams" ||
+                              localStorage.getItem("user_type") === "admin"
+                              ? false
+                              : true
+                          }
+                          options={accountManagersDropDown}
+                          onChange={(opt) => handleSelectChange(item.id, opt)}
+                          value={selectedAccountManagers[item.id] || null}
+                        />
+                      </td>
                       <td>
                         <button
-                          className="btn btn-light text-primary"
+                          className="btn btn-light text-primary mt-2 mb-2"
                           onClick={() => {
-                            console.log(item);
-                            navigate("/vendor_details", { state: item });
+                            swal({
+                              text: `Are You Sure to Update ${item.arName} Vendor`,
+                              icon: "warning",
+                              buttons: true,
+                              dangerMode: true,
+                            }).then((willDelete) => {
+                              if (willDelete) {
+                                const selectedManager =
+                                  selectedAccountManagers[item.id];
+                                if (
+                                  !selectedManager ||
+                                  selectedManager.length === 0
+                                ) {
+                                  swal("Error!", {
+                                    text: "Please Fill Account Manager",
+                                    icon: "warning",
+                                  });
+                                  return;
+                                }
+                                updateVendorInfo(
+                                  item.id,
+                                  item.arName,
+                                  selectedManager
+                                );
+                              } else {
+                                swal("You Cancelled the Operation!");
+                              }
+                            });
                           }}
                         >
-                          <b>Details</b>
+                          <b>Assign</b>
                         </button>
                       </td>
                     </tr>
@@ -259,4 +338,4 @@ function VendorsWithoutDetailsPage() {
   );
 }
 
-export default VendorsWithoutDetailsPage;
+export default VendorsWithoutAccountManagersPage;

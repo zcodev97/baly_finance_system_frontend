@@ -10,9 +10,10 @@ import PaidVendorsPage from "./pages/paid vendors/records";
 import PaidVendorOrdersPage from "./pages/paid vendors/details";
 import VendorDetailsPage from "./pages/vendors/details";
 import AccountManagersLogsPage from "./pages/vendors/account_managers_logs.jsx";
-import VendorsWithoutDetailsPage from "./pages/vendors/vendors_without_details.jsx";
+import VendorsWithoutAccountManagersPage from "./pages/vendors/vendors_without_account_managers.jsx";
 import FillVendorDetailsInfoPage from "./pages/vendors/fill_vendor_details_info.jsx";
 import FilteredVendorsPage from "./pages/vendors/filtered_vendors.jsx";
+import VendorsWithoutDetailsPage from "./pages/vendors/vendors_without_details.jsx";
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
               <Route
                 path="/filtered_vendors"
                 element={<FilteredVendorsPage />}
+              />
+              <Route
+                path="/vendors_without_account_managers"
+                element={<VendorsWithoutAccountManagersPage />}
               />
               <Route
                 path="/vendors_without_details"
