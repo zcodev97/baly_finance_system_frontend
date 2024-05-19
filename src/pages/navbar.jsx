@@ -38,9 +38,9 @@ function NavBar() {
       });
   }
 
-  const [vendorsWIthoutInfo, setVendorsWithoutInfo] = useState([]);
+  const [vendorsWithoutAccountManagers, setVendorsWithoutAccountManagers] = useState([]);
 
-  async function loadVendorsWithoutDetails(page = 1) {
+  async function loadVendorsWithoutAccountManagers(page = 1) {
     await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
       method: "GET",
       headers: {
@@ -54,7 +54,7 @@ function NavBar() {
           navigate("/login", { replace: true });
         }
 
-        setVendorsWithoutInfo(data);
+        setVendorsWithoutAccountManagers(data);
       })
       .catch((error) => {
         // alert(error);
@@ -74,9 +74,39 @@ function NavBar() {
     navigate("/login", { replace: true });
   }
 
+
+  const [vendorsWithoutDetails, setVendorsWithoutDetails] = useState([]);
+
+  async function loadVendorsWithoutDetails(page = 1) {
+    setLoading(true);
+    await fetch(SYSTEM_URL + `get_vendors_without_details_info/?page=${page}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === "token_not_valid") {
+          navigate("/login", { replace: true });
+        }
+
+        setVendorsWithoutDetails(data);
+
+      })
+      .catch((error) => {
+        alert(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   useEffect(() => {
     loadData();
-    loadVendorsWithoutDetails();
+    loadVendorsWithoutAccountManagers();
+    loadVendorsWithoutDetails()
   }, []);
 
   if (loading) {
@@ -230,13 +260,22 @@ function NavBar() {
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
+                      justifyContent: 'space-between'
                     }}
                   >
                     <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "bold" }}>
+
+                      <i class="fi fi-ss-circle " style={{ marginRight: '10px' }}></i>
+
+
                       Vendors Without Account Managers
+
+
+
+                    </div>
+
+                    <div>
+                      {vendorsWithoutAccountManagers.length}
                     </div>
 
                   </div>
@@ -259,13 +298,20 @@ function NavBar() {
                       display: "flex",
                       alignItems: "center",
                       alignContent: "center",
+                      justifyContent: 'space-between'
                     }}
                   >
                     <div>
-                      <i class="fi fi-ss-circle"></i>
-                    </div>
-                    <div style={{ marginLeft: "10px", fontWeight: "bold" }}>
+
+                      <i class="fi fi-ss-circle" style={{ marginRight: '10px' }}></i>
+
+
                       Vendors Without Details
+
+                    </div>
+
+                    <div>
+                      {vendorsWithoutDetails.count}
                     </div>
 
                   </div>
