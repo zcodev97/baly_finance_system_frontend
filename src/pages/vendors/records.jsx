@@ -45,6 +45,31 @@ function VendorsPage() {
 
   const [file, setFile] = useState(null);
 
+  const [selectedFullyRefunded, setselectedFullyRefunded] = useState({});
+
+  const fully_refended_options = [
+    { value: 'true', label: 'Yes' },
+    { value: 'false', label: 'No' },
+    { value: 'undefined', label: 'Do not Include' },
+  ];
+
+  const [selectedPenalized, setselectedPenalized] = useState({});
+
+  const penalized_options = [
+    { value: 'true', label: 'Yes' },
+    { value: 'false', label: 'No' },
+    { value: 'undefined', label: 'Do not Include' },
+  ];
+
+
+  const [selectedComissionAfterDiscount, setselectedComissionAfterDiscount] = useState({});
+
+  const comission_after_discount_options = [
+    { value: 'true', label: 'Yes' },
+    { value: 'false', label: 'No' },
+    { value: 'undefined', label: 'Do not Include' },
+  ];
+
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
@@ -195,7 +220,7 @@ function VendorsPage() {
       "vendor/?" +
       `pay_period=${selectedPaymentCycle.label}&pay_type=${selectePaymentMethod.label
       }&account_manager=${selectAccoutnManager.label
-      }&fully_refended=${fully_refunded.toString()}&penalized=${penalized.toString()}&commision_after_discount=${commission_after_discount.toString()}`,
+      }&fully_refended=${selectedFullyRefunded.value}&penalized=${selectedPenalized.value}&commision_after_discount=${selectedComissionAfterDiscount.value}`,
       {
         method: "GET",
         headers: {
@@ -396,30 +421,29 @@ function VendorsPage() {
                 }}
               >
                 Fully Refended
-                <input
-                  style={{ marginLeft: "10px" }}
-                  // checked={fully_refunded}
-                  className="form-check-input"
-                  type="checkbox"
-                  name="fully_refended"
-                  id="fully_refended"
-                  onChange={setFullyRefendedCheckBoxButton}
+                <Select
+                  defaultValue={selectedFullyRefunded}
+                  options={fully_refended_options}
+                  onChange={(opt) => {
+                    setselectedFullyRefunded(opt);
+                  }}
+                  value={selectedFullyRefunded}
                 />
               </div>
+
               <div
                 style={{
                   width: "300px",
                 }}
               >
                 Penalized
-                <input
-                  style={{ marginLeft: "10px" }}
-                  // checked={penalized}
-                  className="form-check-input"
-                  type="checkbox"
-                  name="Penalized"
-                  id="Penalized"
-                  onChange={setPenalizedCheckBoxButton}
+                <Select
+                  defaultValue={selectedPenalized}
+                  options={penalized_options}
+                  onChange={(opt) => {
+                    setselectedPenalized(opt);
+                  }}
+                  value={selectedPenalized}
                 />
               </div>
               <div
@@ -427,15 +451,14 @@ function VendorsPage() {
                   width: "300px",
                 }}
               >
-                Commission after Discount
-                <input
-                  style={{ marginLeft: "10px" }}
-                  // checked={commission_after_discount}
-                  className="form-check-input"
-                  type="checkbox"
-                  name="Commission after Discount"
-                  id="Commission after Discount"
-                  onChange={setCommissionAfterDiscountCheckBoxButton}
+                Commission After Discount
+                <Select
+                  defaultValue={selectedComissionAfterDiscount}
+                  options={comission_after_discount_options}
+                  onChange={(opt) => {
+                    setselectedComissionAfterDiscount(opt);
+                  }}
+                  value={selectedComissionAfterDiscount}
                 />
               </div>
 
