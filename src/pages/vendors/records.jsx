@@ -38,7 +38,7 @@ function VendorsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const [totalDinar, setTotalDinar] = useState(0);
   const [totalDollar, setTotalDollar] = useState(0);
@@ -125,7 +125,7 @@ function VendorsPage() {
   async function loadAccountManagersDropDownMenu() {
     setLoading(true);
 
-    fetch(SYSTEM_URL + "account_managers/", {
+    await fetch(SYSTEM_URL + "account_managers/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -159,7 +159,7 @@ function VendorsPage() {
   async function loadVendorsDropDownMenu() {
     setLoading(true);
 
-    fetch(SYSTEM_URL + "vendors_id_name_dropdown/", {
+    await fetch(SYSTEM_URL + "vendors_id_name_dropdown/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -190,7 +190,7 @@ function VendorsPage() {
   async function getFilteredVendors() {
     setLoading(true);
 
-    fetch(
+    await fetch(
       SYSTEM_URL +
       "vendor/?" +
       `pay_period=${selectedPaymentCycle.label}&pay_type=${selectePaymentMethod.label
@@ -223,7 +223,7 @@ function VendorsPage() {
   async function getSingleVendor(vendor_id) {
     setLoading(true);
 
-    fetch(SYSTEM_URL + "vendor/?" + `vendor_id=${vendor_id}`, {
+    await fetch(SYSTEM_URL + "vendor/?" + `vendor_id=${vendor_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -248,6 +248,8 @@ function VendorsPage() {
   const [vendorsWIthoutInfo, setVendorsWithoutInfo] = useState([]);
 
   async function loadVendorsWithoutDetails(page = 1) {
+    setLoading(true);
+
     await fetch(SYSTEM_URL + `api/unmatched-vendors/?page=${page}`, {
       method: "GET",
       headers: {
@@ -266,6 +268,8 @@ function VendorsPage() {
       .catch((error) => {
         // alert(error);
         console.log(error);
+      }).finally(() => {
+        setLoading(false);
       });
   }
 
@@ -273,9 +277,10 @@ function VendorsPage() {
     loadData();
     loadVendorsDropDownMenu();
     loadAccountManagersDropDownMenu();
+    loadVendorsWithoutDetails();
+
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    loadVendorsWithoutDetails();
   }, []);
 
   const totalPages = Math.ceil(data.count / itemsPerPage);

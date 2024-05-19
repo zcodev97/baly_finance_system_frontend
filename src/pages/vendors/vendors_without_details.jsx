@@ -21,7 +21,7 @@ function VendorsWithoutDetailsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [paginatedData, setPaginatedData] = useState([]);
-  const itemsPerPage = 15;
+  const itemsPerPage = 10;
 
   async function loadData(page = 1) {
     setLoading(true);
@@ -280,7 +280,7 @@ function VendorsWithoutDetailsPage() {
                           id={`select-${item.id}`}
                           isDisabled={
                             localStorage.getItem("user_type") === "ams" ||
-                            localStorage.getItem("user_type") === "admin"
+                              localStorage.getItem("user_type") === "admin"
                               ? false
                               : true
                           }
