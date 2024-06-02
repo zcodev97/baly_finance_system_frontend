@@ -232,7 +232,7 @@ function VendorsWithoutDetailsPage() {
                 </thead>
                 <tbody>
                   {paginatedData?.map((item) => (
-                    <tr className="align-middle" key={item.id}>
+                    <tr className="align-middle" key={item.vendor_id.id}>
                       <td>{item.vendor_id.id}</td>
                       <td>{item.vendor_id.arName}</td>
 
@@ -240,7 +240,7 @@ function VendorsWithoutDetailsPage() {
                         <button
                           className="btn btn-light text-primary"
                           onClick={() => {
-                            console.log(item);
+                            // console.log(item);
                             navigate("/vendor_details", { state: item });
                           }}
                         >

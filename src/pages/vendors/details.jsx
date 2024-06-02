@@ -14,7 +14,7 @@ function VendorDetailsPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  console.log(location.state);
+  // console.log(location.state);
   const [vendorName, setVendorName] = useState("");
   const [number, setNumber] = useState("");
   const [receiverName, setPaymentReceiverName] = useState("");
@@ -45,9 +45,13 @@ function VendorDetailsPage() {
     setcommission_after_discount(checked);
   };
 
-  const [rows, setRows] = useState([
-    ...Object.values(location.state.owner_email_json),
-  ]);
+  console.log(location.state)
+
+  const [rows, setRows] = useState(
+
+    (location.state?.owner_email_json === 'no emails' || location.state?.owner_email_json[0] === 'n' || location.state?.owner_email_json[0]?.title === '') ?
+      [] : [...Object.values(location.state?.owner_email_json)],
+  );
 
   const addRow = () => {
     setRows([...rows, { title: "" }]);
@@ -157,6 +161,9 @@ function VendorDetailsPage() {
       });
   }
 
+
+
+
   const [selectedAccountManager, setSelecetedAccountManager] = useState("");
   const [accountManagersDropDown, setAccountManagersDropDown] = useState([]);
   let dropdownaccountManagersTemp = [];
@@ -205,7 +212,7 @@ function VendorDetailsPage() {
   function ValidateEmail(input) {
     var validRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
+    if (input === undefined) return;
     if (input.match(validRegex)) {
       return true;
     } else {
@@ -214,22 +221,15 @@ function VendorDetailsPage() {
   }
 
   async function updateVendorInfo() {
-    let emails = rows.filter((obj) => Object.keys(obj).length > 0);
 
-    let areValidEmails = emails.map((i) => ValidateEmail(i.title));
 
-    if (areValidEmails.find((i) => i === false) === false) {
-      swal("Error!", {
-        title: "Check Email Input!",
-        text: `Try to Correct Email address !`,
-        icon: "warning",
-        dangerMode: true,
-      });
-      setLoading(false);
 
-      return;
-    } else {
+    if (location.state?.owner_email_json === 'no emails' || location.state?.owner_email_json[0] === 'n') {
       setLoading(true);
+      let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+
+
+
       fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
         method: "PATCH",
         headers: {
@@ -273,11 +273,100 @@ function VendorDetailsPage() {
         })
         .catch((e) => {
           alert(e);
-          // console.log(e);
+        }).finally(() => {
+          setLoading(false);
+
         });
+    } else {
+
+
+      setLoading(true);
+
+
+      let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+
+      let d = {
+        name: location.state.vendor_id.arName,
+        number: number,
+        pay_period: selectedPaymentCycle.value,
+        pay_type: selectedPaymentMethod.value,
+        account_manager: selectedAccountManager.value,
+        owner_name: receiverName,
+        owner_phone: "1111",
+        owner_email_json: emails,
+        fully_refunded: fully_refunded,
+        penalized: penalized,
+        commission_after_discount: commission_after_discount,
+      };
+
+      let areValidEmails = emails.map((i) => ValidateEmail(i.title));
+
+      if (areValidEmails.find((i) => i === false) === false) {
+        swal("Error!", {
+          title: "Check Email Input!",
+          text: `Try to Correct Email address !`,
+          icon: "warning",
+          dangerMode: true,
+        });
+        setLoading(false);
+
+        return;
+      } else {
+
+        fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            name: location.state.vendor_id.arName,
+            number: number,
+            pay_period: selectedPaymentCycle.value,
+            pay_type: selectedPaymentMethod.value,
+            account_manager: selectedAccountManager.value,
+            owner_name: receiverName,
+            owner_phone: "1111",
+            owner_email_json: emails,
+            fully_refunded: fully_refunded,
+            penalized: penalized,
+            commission_after_discount: commission_after_discount,
+          }),
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              return response.json();
+            } else {
+              return {};
+            }
+          })
+          .then(async (response) => {
+            if (Object.values(response).length > 0) {
+              await SaveDataToLogsTableAndSendEmail(emails);
+              navigate("/vendors", { replace: true });
+              loadVendorUpdatesLogs();
+            } else {
+              swal("Failed To Save Data to DB !", {
+                text: "Data not saved and Email is not Sent",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+              });
+            }
+          })
+          .catch((e) => {
+            alert(e);
+          }).finally(() => {
+            setLoading(false);
+
+          });
+      }
+
+
+
     }
 
-    setLoading(false);
+
   }
 
   async function SaveDataToLogsTableAndSendEmail(emails) {
@@ -678,30 +767,33 @@ function VendorDetailsPage() {
                           </tr>
                         </tfoot>
                         <tbody>
-                          {rows.map((row, index) => (
-                            <tr key={index}>
-                              <td>
-                                <button
-                                  className="btn btn-light text-danger"
-                                  onClick={() => deleteRow(index)}
-                                >
-                                  <b> Delete</b>
-                                </button>
-                              </td>
 
-                              <td>
-                                <input
-                                  className="form-control text-center"
-                                  type="email"
-                                  // dir="rtl"
-                                  value={row.title}
-                                  onChange={(e) =>
-                                    handleChange(index, "title", e.target.value)
-                                  }
-                                />
-                              </td>
-                            </tr>
-                          ))}
+                          {
+                            rows?.length === 0 ? null :
+                              rows?.map((row, index) => (
+                                <tr key={index}>
+                                  <td>
+                                    <button
+                                      className="btn btn-light text-danger"
+                                      onClick={() => deleteRow(index)}
+                                    >
+                                      <b> Delete</b>
+                                    </button>
+                                  </td>
+
+                                  <td>
+                                    <input
+                                      className="form-control text-center"
+                                      type="email"
+                                      // dir="rtl"
+                                      value={row.title}
+                                      onChange={(e) =>
+                                        handleChange(index, "title", e.target.value)
+                                      }
+                                    />
+                                  </td>
+                                </tr>
+                              ))}
                         </tbody>
                       </table>
                     </td>
