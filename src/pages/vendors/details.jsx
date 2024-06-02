@@ -45,7 +45,7 @@ function VendorDetailsPage() {
     setcommission_after_discount(checked);
   };
 
-  console.log(location.state)
+  // console.log(location.state)
 
   const [rows, setRows] = useState(
 
