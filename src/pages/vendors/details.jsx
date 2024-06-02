@@ -54,6 +54,7 @@ function VendorDetailsPage() {
   );
 
   const addRow = () => {
+
     setRows([...rows, { title: "" }]);
   };
 
@@ -238,11 +239,12 @@ function VendorDetailsPage() {
         },
         body: JSON.stringify({
           name: location.state.vendor_id.arName,
-          number: number,
+
           pay_period: selectedPaymentCycle.value,
           pay_type: selectedPaymentMethod.value,
           account_manager: selectedAccountManager.value,
-          owner_name: receiverName,
+          number: (selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card') ? number : 'NA',
+          payment_receiver_name: selectedPaymentMethod.label === 'Cash' ? receiverName : 'NA',
           owner_phone: "1111",
           owner_email_json: emails,
           fully_refunded: fully_refunded,
@@ -287,11 +289,11 @@ function VendorDetailsPage() {
 
       let d = {
         name: location.state.vendor_id.arName,
-        number: number,
+        number: (selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card') ? number : 'NA',
+        payment_receiver_name: selectedPaymentMethod.label === 'Cash' ? receiverName : 'NA',
         pay_period: selectedPaymentCycle.value,
         pay_type: selectedPaymentMethod.value,
         account_manager: selectedAccountManager.value,
-        owner_name: receiverName,
         owner_phone: "1111",
         owner_email_json: emails,
         fully_refunded: fully_refunded,
@@ -321,11 +323,12 @@ function VendorDetailsPage() {
           },
           body: JSON.stringify({
             name: location.state.vendor_id.arName,
-            number: number,
+
             pay_period: selectedPaymentCycle.value,
             pay_type: selectedPaymentMethod.value,
             account_manager: selectedAccountManager.value,
-            owner_name: receiverName,
+            number: (selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card') ? number : 'NA',
+            payment_receiver_name: selectedPaymentMethod.label === 'Cash' ? receiverName : 'NA',
             owner_phone: "1111",
             owner_email_json: emails,
             fully_refunded: fully_refunded,
@@ -488,7 +491,7 @@ function VendorDetailsPage() {
     loadPaymentsMethod();
     loadPaymentsCycle();
     loadAccountManagers();
-    setPaymentReceiverName(location.state.owner_name);
+    setPaymentReceiverName(location.state.payment_receiver_name);
     setNumber(location.state.number);
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -627,7 +630,14 @@ function VendorDetailsPage() {
                       />
                     </td>
                   </tr>
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card'
+                          ? "table-row"
+                          : "none",
+                    }}
+                  >
                     <td>Payment Method Number</td>
                     <td>
                       <input
@@ -642,7 +652,13 @@ function VendorDetailsPage() {
                       />
                     </td>
                   </tr>
-                  <tr>
+                  <tr
+                    style={{
+                      display:
+                        selectedPaymentMethod.label === 'Cash'
+                          ? "table-row"
+                          : "none",
+                    }}>
                     <td>Payment Receiver Name </td>
                     <td>
                       <input
@@ -653,7 +669,7 @@ function VendorDetailsPage() {
                         className="form-control text-center"
                         id="username"
                         style={{ fontSize: "20px" }}
-                        defaultValue={location.state.owner_name}
+                        defaultValue={location.state.payment_receiver_name}
                       />
                     </td>
                   </tr>
@@ -750,54 +766,54 @@ function VendorDetailsPage() {
                       </tbody>
                     </table>
                   </tr> */}
-                  <tr>
-                    <td colSpan={2}>
-                      <table className="table text-center">
-                        <tfoot>
-                          <tr>
-                            <th></th>
-                            <th>
-                              <button
-                                className="btn btn-light text-primary"
-                                onClick={addRow}
-                              >
-                                <b>Add Another Email </b>
-                              </button>
-                            </th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
+                  {/* <tr>
+                      <td colSpan={2}>
+                        <table className="table text-center">
+                          <tfoot>
+                            <tr>
+                              <th></th>
+                              <th>
+                                <button
+                                  className="btn btn-light text-primary"
+                                  onClick={addRow}
+                                >
+                                  <b>Add Another Email </b>
+                                </button>
+                              </th>
+                            </tr>
+                          </tfoot>
+                          <tbody>
 
-                          {
-                            rows?.length === 0 ? null :
-                              rows?.map((row, index) => (
-                                <tr key={index}>
-                                  <td>
-                                    <button
-                                      className="btn btn-light text-danger"
-                                      onClick={() => deleteRow(index)}
-                                    >
-                                      <b> Delete</b>
-                                    </button>
-                                  </td>
+                            {
+                              rows?.length === 0 ? null :
+                                rows?.map((row, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      <button
+                                        className="btn btn-light text-danger"
+                                        onClick={() => deleteRow(index)}
+                                      >
+                                        <b> Delete</b>
+                                      </button>
+                                    </td>
 
-                                  <td>
-                                    <input
-                                      className="form-control text-center"
-                                      type="email"
-                                      // dir="rtl"
-                                      value={row.title}
-                                      onChange={(e) =>
-                                        handleChange(index, "title", e.target.value)
-                                      }
-                                    />
-                                  </td>
-                                </tr>
-                              ))}
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
+                                    <td>
+                                      <input
+                                        className="form-control text-center"
+                                        type="email"
+                                        // dir="rtl"
+                                        value={row.title}
+                                        onChange={(e) =>
+                                          handleChange(index, "title", e.target.value)
+                                        }
+                                      />
+                                    </td>
+                                  </tr>
+                                ))}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr> */}
                   <tr>
                     <td className="text-center" colSpan={2}>
                       <button
@@ -810,6 +826,44 @@ function VendorDetailsPage() {
                             dangerMode: true,
                           }).then((willDelete) => {
                             if (willDelete) {
+
+                              if (selectedPaymentMethod.label === 'NA') {
+                                swal("Please Fill Payment Method!");
+                                return
+                              }
+
+
+                              if (selectedPaymentCycle.label === 'NA') {
+                                swal("Please Fill Payment Cycle!");
+                                return
+                              }
+
+
+                              if (selectedPaymentMethod.label !== 'ZainCash' &&
+
+                                selectedPaymentMethod.label !== 'Qi Card'
+                              ) {
+                                if (receiverName === 'NA' || receiverName === undefined || receiverName === null) {
+                                  swal("Please Fill Payment Receiver Name!");
+                                  return
+                                }
+
+
+                              }
+
+
+
+                              if (selectedPaymentMethod.label !== 'Cash') {
+
+                                if (number === 'NA' || number === undefined || number === null) {
+                                  swal("Please Fill Payment Method Number!");
+                                  return
+                                }
+                              }
+
+
+
+
                               updateVendorInfo();
                             } else {
                               swal("You Cancelled the Operation!");
