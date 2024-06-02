@@ -227,11 +227,11 @@ function VendorDetailsPage() {
 
     if (location.state?.owner_email_json === 'no emails' || location.state?.owner_email_json[0] === 'n') {
       setLoading(true);
-      let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+      let emails = rows?.filter((obj) => Object.keys(obj).length > 0);
 
 
 
-      fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
+      await fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -315,7 +315,7 @@ function VendorDetailsPage() {
         return;
       } else {
 
-        fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
+        await fetch(SYSTEM_URL + "update_vendor/" + location.state.vendor_id.id, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -957,8 +957,8 @@ function VendorDetailsPage() {
                       <th>New Penalized </th>
                       <th>Old Commission After Discount</th>
                       <th>New Commission After Discount </th>
-                      <th>Old Emails</th>
-                      <th>New Emails </th>
+                      {/* <th>Old Emails</th>
+                      <th>New Emails </th> */}
                       <th>Created At </th>
                     </tr>
                   </thead>
@@ -987,20 +987,20 @@ function VendorDetailsPage() {
                         <td>{item.new_panelized}</td>
                         <td>{item.old_commission_after_discount}</td>
                         <td>{item.new_commission_after_discount}</td>
-                        <td>
-                          {item.old_emails.split(",").map((i, index) => (
+                        {/* <td>
+                          {item.old_emails.split(",")?.map((i, index) => (
                             <tr className="text-center">
                               <td>{i}</td>
                             </tr>
                           ))}
                         </td>
                         <td>
-                          {item.new_emails.split(",").map((i) => (
+                          {item.new_emails.split(",")?.map((i) => (
                             <tr className="text-center">
                               <td>{i}</td>
                             </tr>
                           ))}
-                        </td>
+                        </td> */}
                         <td>{formatDate(item.created_at)}</td>
                       </tr>
                     ))}
