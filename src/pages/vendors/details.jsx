@@ -963,7 +963,7 @@ function VendorDetailsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedData.map((item, index) => (
+                    {paginatedData?.map((item, index) => (
                       <tr
                         className="align-middle"
                         key={randomInt(1, 100000000)}

@@ -517,7 +517,7 @@ function VendorsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedData.map((item) => (
+                  {paginatedData?.map((item) => (
                     <tr className="align-middle" key={randomInt(1, 100000000)}>
                       <td>{item.vendor_id.id}</td>
                       <td>{item.vendor_id.arName}</td>
