@@ -110,7 +110,8 @@ function VendorDetailsPage() {
         setpaymentMethodDropDown(dropdownMenupaymentmethodTemp);
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -202,8 +203,8 @@ function VendorDetailsPage() {
         setAccountManagersDropDown(dropdownaccountManagersTemp);
       })
       .catch((e) => {
-        alert(e);
-        // console.log(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -274,7 +275,9 @@ function VendorDetailsPage() {
           }
         })
         .catch((e) => {
-          alert(e);
+          // alert(e);
+          console.log(e);
+
         }).finally(() => {
           setLoading(false);
 
@@ -285,7 +288,7 @@ function VendorDetailsPage() {
       setLoading(true);
 
 
-      let emails = rows.filter((obj) => Object.keys(obj).length > 0);
+      let emails = rows?.filter((obj) => Object.keys(obj).length > 0);
 
       let d = {
         name: location.state.vendor_id.arName,
@@ -301,7 +304,7 @@ function VendorDetailsPage() {
         commission_after_discount: commission_after_discount,
       };
 
-      let areValidEmails = emails.map((i) => ValidateEmail(i.title));
+      let areValidEmails = emails?.map((i) => ValidateEmail(i.title));
 
       if (areValidEmails.find((i) => i === false) === false) {
         swal("Error!", {
@@ -358,7 +361,9 @@ function VendorDetailsPage() {
             }
           })
           .catch((e) => {
-            alert(e);
+            // alert(e);
+            console.log(e);
+
           }).finally(() => {
             setLoading(false);
 
@@ -444,7 +449,9 @@ function VendorDetailsPage() {
         }
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
+
       })
       .finally(() => {
         setLoading(false);
@@ -478,7 +485,9 @@ function VendorDetailsPage() {
         setPaginatedData(data.results);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
+
       })
       .finally(() => {
         setLoading(false);
@@ -552,7 +561,7 @@ function VendorDetailsPage() {
                         className="form-control text-center"
                         id="username"
                         style={{ fontSize: "20px" }}
-                        defaultValue={location.state.vendor_id.id}
+                        defaultValue={location.state?.vendor_id?.id}
                       />
                     </td>
                   </tr>

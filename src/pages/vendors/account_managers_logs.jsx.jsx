@@ -39,7 +39,8 @@ function AccountManagersLogsPage() {
         setPaginatedData(data.results);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       })
       .finally(() => {
         setLoading(false);
@@ -73,7 +74,9 @@ function AccountManagersLogsPage() {
         setVendorsDropDownMenu(vendorTempDropDownMenu);
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
+
       })
       .finally(() => {
         setLoading(false);
@@ -99,7 +102,9 @@ function AccountManagersLogsPage() {
         navigate("/vendor_details", { state: response.results[0] });
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
+
       })
       .finally(() => {
         setLoading(false);

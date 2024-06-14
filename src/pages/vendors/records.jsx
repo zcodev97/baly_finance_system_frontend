@@ -141,6 +141,8 @@ function VendorsPage() {
       .finally(() => {
         setLoading(false);
       });
+    setLoading(false);
+
   }
 
   const [selectAccoutnManager, setSelectedAccountManager] = useState({});
@@ -232,13 +234,16 @@ function VendorsPage() {
       .then((response) => response.json())
       .then((response) => {
         if (response.code === "token_not_valid") {
-          navigate("/login", { replace: true });
+          navigate("/login",
+            //  { replace: true }
+          );
         }
         console.log(response);
         navigate("/filtered_vendors", { state: response });
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -263,7 +268,9 @@ function VendorsPage() {
         navigate("/vendor_details", { state: response[0] });
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
+
       })
       .finally(() => {
         setLoading(false);
@@ -300,9 +307,9 @@ function VendorsPage() {
 
   useEffect(() => {
     loadData();
-    loadVendorsDropDownMenu();
-    loadAccountManagersDropDownMenu();
-    loadVendorsWithoutDetails();
+    // loadVendorsDropDownMenu();
+    // loadAccountManagersDropDownMenu();
+    // loadVendorsWithoutDetails();
 
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;

@@ -59,8 +59,8 @@ function FillVendorDetailsInfoPage() {
         setAccountManagersDropDown(dropdownaccountManagersTemp);
       })
       .catch((e) => {
-        alert(e);
-        // console.log(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -140,7 +140,8 @@ function FillVendorDetailsInfoPage() {
         }
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
       });
     // }
 
@@ -206,7 +207,8 @@ function FillVendorDetailsInfoPage() {
         }
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -325,7 +327,7 @@ function FillVendorDetailsInfoPage() {
                       <Select
                         isDisabled={
                           localStorage.getItem("user_type") === "ams" ||
-                          localStorage.getItem("user_type") === "admin"
+                            localStorage.getItem("user_type") === "admin"
                             ? false
                             : true
                         }

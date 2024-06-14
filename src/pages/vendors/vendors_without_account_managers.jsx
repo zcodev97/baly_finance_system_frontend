@@ -42,7 +42,8 @@ function VendorsWithoutAccountManagersPage() {
         setPaginatedData(data);
       })
       .catch((error) => {
-        alert(error);
+        // alert(error);
+        console.log(error);
       })
       .finally(() => {
         setLoading(false);
@@ -83,8 +84,8 @@ function VendorsWithoutAccountManagersPage() {
         setAccountManagersDropDown(dropdownaccountManagersTemp);
       })
       .catch((e) => {
-        alert(e);
-        // console.log(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);
@@ -142,7 +143,8 @@ function VendorsWithoutAccountManagersPage() {
         }
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
       });
     // }
 
@@ -212,7 +214,8 @@ function VendorsWithoutAccountManagersPage() {
         }
       })
       .catch((e) => {
-        alert(e);
+        // alert(e);
+        console.log(e);
       })
       .finally(() => {
         setLoading(false);

@@ -78,7 +78,7 @@ function NavBar() {
   const [vendorsWithoutDetails, setVendorsWithoutDetails] = useState([]);
 
   async function loadVendorsWithoutDetails(page = 1) {
-    setLoading(true);
+    // setLoading(true);
     await fetch(SYSTEM_URL + `get_vendors_without_details_info/?page=${page}`, {
       method: "GET",
       headers: {
@@ -97,10 +97,8 @@ function NavBar() {
       })
       .catch((error) => {
         alert(error);
-      })
-      .finally(() => {
-        setLoading(false);
       });
+
   }
 
   useEffect(() => {
@@ -109,13 +107,7 @@ function NavBar() {
     loadVendorsWithoutDetails()
   }, []);
 
-  if (loading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
+
 
   return (
     <>
@@ -153,7 +145,9 @@ function NavBar() {
                     }}
                   >
                     <div>
-                      <i class="fi fi-tr-dot-circle"></i>
+
+                      <i className="fi fi-tr-dot-circle"></i>
+
                     </div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       Vendors System
@@ -194,7 +188,7 @@ function NavBar() {
                     }}
                   >
                     <div>
-                      <i class="fi fi-rs-arrow-alt-circle-left"></i>
+                      <i className="fi fi-rs-arrow-alt-circle-left"></i>
                     </div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       Sign Out
@@ -220,7 +214,7 @@ function NavBar() {
                     }}
                   >
                     <div style={{ display: "flex" }}>
-                      <i class="fi fi-ss-circle"></i>{" "}
+                      <i className="fi fi-ss-circle"></i>{" "}
                       <div style={{ marginLeft: "10px" }}>Vendors</div>
                     </div>
                     <div
@@ -265,7 +259,7 @@ function NavBar() {
                   >
                     <div>
 
-                      <i class="fi fi-ss-circle " style={{ marginRight: '10px' }}></i>
+                      <i className="fi fi-ss-circle " style={{ marginRight: '10px' }}></i>
 
 
                       Vendors Without Account Managers
@@ -303,7 +297,7 @@ function NavBar() {
                   >
                     <div>
 
-                      <i class="fi fi-ss-circle" style={{ marginRight: '10px' }}></i>
+                      <i className="fi fi-ss-circle" style={{ marginRight: '10px' }}></i>
 
 
                       Vendors Without Details
@@ -367,7 +361,7 @@ function NavBar() {
                     }}
                   >
                     <div>
-                      <i class="fi fi-ss-circle"></i>
+                      <i className="fi fi-ss-circle"></i>
                     </div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       Logs
@@ -401,7 +395,7 @@ function NavBar() {
                     }}
                   >
                     <div>
-                      <i class="fi fi-ss-circle"></i>
+                      <i className="fi fi-ss-circle"></i>
                     </div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       Create Payment
@@ -433,7 +427,7 @@ function NavBar() {
                     }}
                   >
                     <div>
-                      <i class="fi fi-ss-circle"></i>
+                      <i className="fi fi-ss-circle"></i>
                     </div>
                     <div style={{ marginLeft: "10px", fontWeight: "normal" }}>
                       Payments
