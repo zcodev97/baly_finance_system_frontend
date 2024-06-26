@@ -326,12 +326,11 @@ function VendorDetailsPage() {
           },
           body: JSON.stringify({
             name: location.state.vendor_id.arName,
-
             pay_period: selectedPaymentCycle.value,
             pay_type: selectedPaymentMethod.value,
             account_manager: selectedAccountManager.value,
-            number: (selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card') ? number : 'NA',
-            payment_receiver_name: selectedPaymentMethod.label === 'Cash' ? receiverName : 'NA',
+            number: (selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card' || selectedPaymentMethod.label === 'Taif') ? number : 'NA',
+            payment_receiver_name: (selectedPaymentMethod.label === 'Cash' || selectedPaymentMethod.label === 'Taif') ? receiverName : 'NA',
             owner_phone: "1111",
             owner_email_json: emails,
             fully_refunded: fully_refunded,
@@ -502,6 +501,7 @@ function VendorDetailsPage() {
     loadAccountManagers();
     setPaymentReceiverName(location.state.payment_receiver_name);
     setNumber(location.state.number);
+    console.log(location.state)
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
 
