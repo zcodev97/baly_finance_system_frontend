@@ -88,6 +88,7 @@ function VendorsPage() {
     { value: "chocolate", label: "Cash" },
     { value: "strawberry", label: "Qi Card" },
     { value: "vanilla", label: "ZainCash" },
+    { value: "vanilla", label: "Taif" },
   ];
 
   const handleSubmit = async (event) => {
@@ -115,8 +116,11 @@ function VendorsPage() {
     }
   };
 
-  async function loadData(page = 1) {
+  async function getVendorsDetailsInfo(page = 1) {
     setLoading(true);
+
+
+
     let requestUrl = `get_vendors_details_info/?page=${page}`;
     await fetch(SYSTEM_URL + requestUrl, {
       method: "GET",
@@ -131,7 +135,7 @@ function VendorsPage() {
           navigate("/login", { replace: true });
         }
 
-        setData(data);
+
         setPaginatedData(data.results);
       })
       .catch((error) => {
@@ -141,7 +145,7 @@ function VendorsPage() {
       .finally(() => {
         setLoading(false);
       });
-    setLoading(false);
+
 
   }
 
@@ -305,21 +309,59 @@ function VendorsPage() {
       });
   }
 
+
+  const fetchWithCache = async (url, cacheKey) => {
+    const cachedData = sessionStorage.getItem(cacheKey);
+    if (cachedData) {
+      return JSON.parse(cachedData);
+    }
+
+    const response = await fetch(url);
+    const data = await response.json();
+    sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    return data;
+  };
+
+
   useEffect(() => {
-    loadData();
-    // loadVendorsDropDownMenu();
-    // loadAccountManagersDropDownMenu();
-    // loadVendorsWithoutDetails();
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          fetchWithCache('/api/data', 'dataCache'),
+          fetchWithCache('/api/vendors', 'vendorsCache'),
+          fetchWithCache('/api/account-managers', 'accountManagersCache'),
+          fetchWithCache('/api/vendors-without-details', 'vendorsWithoutDetailsCache'),
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+
+
+
+    fetchData();
 
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
+  }, []);
+
+
+
+
+  useEffect(() => {
+    getVendorsDetailsInfo();
+    loadVendorsDropDownMenu();
+    loadAccountManagersDropDownMenu();
+    loadVendorsWithoutDetails();
+
+
   }, []);
 
   const totalPages = Math.ceil(data.count / itemsPerPage);
 
   const changePage = (page) => {
     if (page >= 1 && page <= totalPages) {
-      loadData(page);
+      getVendorsDetailsInfo(page);
 
       setCurrentPage(page);
     }

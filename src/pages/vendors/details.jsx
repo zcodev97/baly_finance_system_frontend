@@ -642,7 +642,7 @@ function VendorDetailsPage() {
                   <tr
                     style={{
                       display:
-                        selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card'
+                        selectedPaymentMethod.label === 'ZainCash' || selectedPaymentMethod.label === 'Qi Card' || selectedPaymentMethod.label === 'Taif'
                           ? "table-row"
                           : "none",
                     }}
@@ -664,7 +664,7 @@ function VendorDetailsPage() {
                   <tr
                     style={{
                       display:
-                        selectedPaymentMethod.label === 'Cash'
+                        selectedPaymentMethod.label === 'Cash' || selectedPaymentMethod.label === 'Taif'
                           ? "table-row"
                           : "none",
                     }}>
