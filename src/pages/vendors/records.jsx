@@ -362,7 +362,6 @@ function VendorsPage() {
   const changePage = (page) => {
     if (page >= 1 && page <= totalPages) {
       getVendorsDetailsInfo(page);
-
       setCurrentPage(page);
     }
   };
